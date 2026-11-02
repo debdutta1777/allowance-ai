@@ -4,7 +4,7 @@ A student cash-flow planner answering: can I make this purchase and still cover 
 
 ## Review status
 
-The complete review interface now includes transaction import, correction, duplicate review, on-device ML categorization, cash-flow forecasts, purchase comparisons, income-delay stress testing and a Gemini explanation endpoint. Forty automated tests pass. Real Gemini responses still require the owner's API key and live verification; mocked provider tests are not a claim of live operation.
+The complete review interface now includes transaction import, correction, duplicate review, on-device ML categorization, cash-flow forecasts, purchase comparisons, income-delay stress testing and a Gemini explanation endpoint. Forty-three automated tests pass. Real Gemini responses still require the owner's API key and live verification; mocked provider tests are not a claim of live operation.
 
 Private preview: https://allowance-ledger-debdutta.mossymount.chatgpt.site
 
@@ -33,15 +33,26 @@ A small multinomial Naive Bayes model categorizes debit merchant descriptions lo
 
 Gemini receives validated plan inputs and server-computed evidence only after consent. It returns structured prose and evidence IDs. Numeric prose, invalid categories, incomplete responses and unknown evidence IDs are rejected. Balances are always computed by application code. Gemini calls use a server-side x-goog-api-key header, never a URL parameter. No real customer financial data or testimonials are included.
 
-For the private review, an authenticated owner can enter an existing Gemini key in the session setup form. The key stays in tab memory, is sent only with AI requests, and is never written to localStorage, returned in API responses or committed. The server allows session keys only when ALLOW_SESSION_KEYS=true and Sites supplies authenticated identity. The current Sites audience restricts the deployment to the owner. Disable session mode or review its policy before changing the audience.
+For the existing ChatGPT Sites private review, an authenticated owner can enter an existing Gemini key in the session setup form. The key stays in tab memory, is sent only with AI requests, and is never written to localStorage, returned in API responses or committed. The server allows session keys only when ALLOW_SESSION_KEYS=true and Sites supplies authenticated identity. The current Sites audience restricts the deployment to the owner. The session-key path is always disabled on Vercel, even if a request spoofs Sites headers or ALLOW_SESSION_KEYS is accidentally enabled.
 
 For a submission deployment, configure GEMINI_API_KEY as a server runtime secret and GEMINI_MODEL as needed. The default model is gemini-3.5-flash-lite. There is no paid-model fallback or automatic retry. Google documents a free tier, but the actual project billing tier and quota must be checked by its owner. Free-tier prompts may be used to improve Google products; use synthetic data for the demo.
 
+## Deploy to Vercel
+
+1. Import debdutta1777/allowance-ai and use the repository root. The framework preset is Next.js; vercel.json provides npm ci and npm run build. Output directory uses the framework default; do not set it to dist. Node.js is pinned to 24.x.
+2. Add GEMINI_API_KEY in the Vercel project's environment-variable settings for Production (and Preview if desired). Paste the actual key there, not into a source file, GitHub repository variable or chat. Do not prefix it with NEXT_PUBLIC_.
+3. Optionally add GEMINI_MODEL=gemini-3.5-flash-lite. The same value is already the application default. Do not enable ALLOW_SESSION_KEYS on Vercel; the server ignores this review-only flow there.
+4. Deploy. If an environment variable is changed after deployment, redeploy for it to take effect.
+5. Open /api/ai to check availability without exposing the key. With the secret configured it returns available:true, provider:Gemini and sessionKeyAllowed:false. This reports configuration presence, not verified quota or model access.
+6. Open the planner, leave the fictional sample in place, enable the Gemini consent checkbox and request Explain this plan. A successful live request is the final provider check. Missing keys, failed requests and quota errors are disclosed; they do not disable forecasting or local ML categorization.
+
+The Vercel domain is a new deployment. The earlier ChatGPT Sites preview does not automatically update from Vercel environment settings. No Vercel account access or real Gemini key was used during this preparation.
+
 ## Development
 
-Requires Node.js 24. Run npm ci, npm test, npx tsc --noEmit, and npm run build. npm run dev starts the supported development server. npm run evaluate:model reproduces the small synthetic classifier report.
+Requires Node.js 24. Run npm ci, npm test, npx tsc --noEmit, and npm run build. npm run dev starts Next.js; npm run start serves a production build. npm run evaluate:model reproduces the small synthetic classifier report.
 
-The server uses the Sites Vinext starter. The public planner is authored in web/; scripts/prepare-client.mjs copies it to public/planner.html and strips TypeScript from the same tested modules in src/. Route / redirects to that planner. Server API: /api/ai. Worker builds are packaged through the Sites workflow. Generated output and local environment files are ignored.
+The default build is standard Next.js for Vercel or a Node.js host. The public planner is authored in web/; scripts/prepare-client.mjs copies it to public/planner.html and strips TypeScript from the same tested modules in src/. Route / redirects to that planner. Server API: /api/ai. The original Sites build is retained under dev:sites, build:sites and start:sites. Generated output and local environment files are ignored.
 
 ## Import format
 

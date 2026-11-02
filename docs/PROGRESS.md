@@ -73,3 +73,14 @@ Deployment ID: appgdep_6ae90585b6448191aab8388bc56f4642
 Environment revision: 2. ALLOW_SESSION_KEYS is enabled; no actual Gemini API key is configured.
 
 The current private audience is preserved. Signed-in owner visits can supply a Gemini key in tab memory through the review form. Live provider response and owner-form behavior await that visit and real key. This is a review-ready implementation with 40 passing tests, not a claim of completed live-AI verification or judge-ready public hosting.
+
+
+## Vercel preparation checkpoint, 3 November 2026 IST
+
+Default dev/build/start commands now use standard Next.js. vercel.json declares the Next.js framework, npm ci and npm run build; output uses the framework default. Node.js is pinned to 24.x. Sites commands remain available separately with :sites suffixes; the previously published Sites preview is a separate deployment.
+
+The Gemini route reads GEMINI_API_KEY and optional GEMINI_MODEL on the server for each request. Whitespace-only keys are unavailable. On Vercel, session-key mode is disabled and client-supplied Sites identity headers are not trusted. No actual API key was requested, stored, committed or used for these checks.
+
+Verification: 43 automated tests pass, including configured-environment-key forwarding with a mocked Gemini transport, key non-disclosure and spoofed-header rejection. npm run build completed using Next.js 16.3.4 with successful compilation, TypeScript checking, static generation and dynamic /api/ai route output. This is a local production-build verification, not proof of a deployed Vercel app or real Gemini response.
+
+Owner next step: import the repository into Vercel, configure GEMINI_API_KEY in the project's environment variables, and deploy or redeploy. Then use the fictional sample to verify a real Gemini explanation. Detailed instructions are in docs/VERCEL.md. No code-development phase remains outstanding for this deployment configuration; provider activation and live verification require the owner's hosting setup.
