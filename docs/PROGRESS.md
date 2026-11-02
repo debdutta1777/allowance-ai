@@ -94,3 +94,12 @@ Two gaps were identified against the chosen smart-budgeting direction: there was
 ## Theme audit completed through repository checks, 3 November 2026 IST
 
 The additions were merged through PR #1 after the corrected feature commit passed full npm test and npm run build checks in GitHub Actions on Node.js 24. Run: https://github.com/debdutta1777/allowance-ai/actions/runs/41538873457 . The earlier draft verification limitation for Node/build is superseded by this successful remote run. Fresh rendered UI checks remain unavailable, and live Gemini still requires the owner's configured server key. Monthly category budgets and supported dated bank alerts are now in main. This closes the two identified code gaps against the selected smart-budgeting direction; the other listed finance tracks are alternatives.
+
+
+## Final pre-deployment recheck, 3 November 2026 IST
+
+Re-ran the latest source locally after the execution environment returned: 52 tests passed, zero failures. The corrected runtime source had already passed the GitHub Actions production build. Browser checks used the generated client assets served in a static QA preview because the preview launcher's Vite-style flags do not launch standard Next.js directly; this was not a live backend/provider test.
+
+Desktop browser verification: saved an October Food limit of INR 100 against INR 180 spending and observed INR 80 overspending; selected November and confirmed October limits did not carry over; imported a dated INR 1,250.50 debit alert; observed November spending update while the forecast minimum stayed INR 1,050; saved November's Food limit of INR 1,000, reloaded and observed the retained limit and INR 250.50 overspending. Earlier CSV, correction, duplicate, local-model and forecast tests remain covered by the suite.
+
+Deployment on Vercel and a real Gemini explanation remain to be checked after the owner configures GEMINI_API_KEY. UI/UX redesign is intentionally deferred until the deployed functional check, as requested. No claim of perfect operation or universal SMS compatibility is made.
