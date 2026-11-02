@@ -2,6 +2,16 @@
 
 A student cash-flow planner answering: can I make this purchase and still cover essentials until my next allowance?
 
+## Theme alignment additions (draft, not yet validated in the full runtime)
+
+The theme permits selecting a single finance use case. Allowance targets smart budgeting, not all six example tracks.
+
+This branch adds a calendar-month report with per-category spending limits, remaining/overspent amounts, explicit uncapped spending, and separate income/refund/transfer totals. Limits are saved per month in the current browser and do not automatically change the forecast opening balance. Totals cover only imported history, not a verified complete statement.
+
+Message import additionally accepts documented dated debit/credit alert patterns with the currency before the verb or debit/credit by/with the currency. Dates must be explicit and use YYYY-MM-DD, DD-MM-YYYY or DD/MM/YYYY. Proper Indian/Western amount grouping and optional Ref/RRN/UTR references are handled. Missing dates, invalid amounts, failed/pending payments and collect requests are rejected. Pattern examples are synthetic; support for every bank or arbitrary SMS dialect is not claimed.
+
+Validation for these additions is limited to focused JavaScript checks and source syntax checks. The execution environment was unavailable, so the full Node test suite, Next.js build and rendered UI checks have not run for this branch. Keep the pull request in draft until those checks pass. The 43-test result below describes the earlier main-branch revision.
+
 ## Review status
 
 The complete review interface now includes transaction import, correction, duplicate review, on-device ML categorization, cash-flow forecasts, purchase comparisons, income-delay stress testing and a Gemini explanation endpoint. Forty-three automated tests pass. Real Gemini responses still require the owner's API key and live verification; mocked provider tests are not a claim of live operation.
@@ -58,7 +68,7 @@ The default build is standard Next.js for Vercel or a Node.js host. The public p
 
 CSV columns: date,description,amount,direction,reference. reference is optional. Dates use YYYY-MM-DD; amounts are positive decimal rupees with up to two places; direction is debit, credit or transfer. Strict CSV quoting supports commas and escaped quotes. Files and pasted text are limited to 64 KB and 200 rows per import, with up to 1,000 saved transactions.
 
-Messages use an explicit dated format such as: 2026-10-29 INR 180.00 debited to Campus Canteen ref DEMO001. Also supports credited from and transferred to. Unsupported formats fail clearly rather than guessing dates. PDF statements and arbitrary bank SMS dialects are not supported in this version.
+Messages use an explicit dated format such as: 2026-10-29 INR 180.00 debited to Campus Canteen ref DEMO001. Also supports credited from and transferred to. The additional supported alert patterns are documented above. Unsupported formats fail clearly rather than guessing dates. PDF statements and arbitrary bank SMS dialects are not supported in this version.
 
 History is stored only in the current browser. It never changes the forecast opening balance automatically. Transfers, incoming refunds and income have separate totals. Possible duplicate references, or matching date/description/amount/direction without references, are excluded by default; users can explicitly keep distinct transactions. Review saved history to correct categories or remove rows. Clear has a session-local undo.
 

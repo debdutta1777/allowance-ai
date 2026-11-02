@@ -1,3 +1,4 @@
+import { parseDatedAlert } from './alert-parser.js';
 import { rupeesToPaise } from './money.ts';
 export const CATEGORIES = ['Food', 'Transport', 'Housing', 'Education', 'Health', 'Shopping', 'Subscriptions', 'Income', 'Refunds', 'Transfers', 'Other'] as const;
 export type Category = typeof CATEGORIES[number];
@@ -75,9 +76,9 @@ export function parseImport(text: string, format: 'csv'|'messages', existing: Tr
     const lines=text.split(/\r?\n/).filter(line=>line.trim());
     if(lines.length>200) throw new Error('Import up to 200 messages at a time.');
     values=lines.map((line,index)=>{
-      const match=line.trim().match(/^(\d{4}-\d{2}-\d{2})\s+(?:INR|Rs\.?|₹)\s*(\d+(?:\.\d{1,2})?)\s+(debited to|credited from|transferred to)\s+(.+?)(?:\s+ref\s+(\S+))?$/i);
-      if(!match) throw new Error(`Message ${index+1} is unsupported. Use the dated sample format; missing dates are never guessed.`);
-      return {date:match[1],amount:match[2],direction:/^debited/i.test(match[3])?'debit':/^credited/i.test(match[3])?'credit':'transfer',description:match[4],reference:match[5]??''};
+      const parsed=parseDatedAlert(line);
+      if(!parsed) throw new Error(`Message ${index+1} is unsupported. Use a supported dated debit/credit alert or the sample format; missing dates are never guessed.`);
+      return parsed;
     });
   }
   if(!values.length) throw new Error('No transaction rows were found.');

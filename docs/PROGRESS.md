@@ -84,3 +84,8 @@ The Gemini route reads GEMINI_API_KEY and optional GEMINI_MODEL on the server fo
 Verification: 43 automated tests pass, including configured-environment-key forwarding with a mocked Gemini transport, key non-disclosure and spoofed-header rejection. npm run build completed using Next.js 16.3.4 with successful compilation, TypeScript checking, static generation and dynamic /api/ai route output. This is a local production-build verification, not proof of a deployed Vercel app or real Gemini response.
 
 Owner next step: import the repository into Vercel, configure GEMINI_API_KEY in the project's environment variables, and deploy or redeploy. Then use the fictional sample to verify a real Gemini explanation. Detailed instructions are in docs/VERCEL.md. No code-development phase remains outstanding for this deployment configuration; provider activation and live verification require the owner's hosting setup.
+
+
+## Theme audit draft, 3 November 2026 IST
+
+Two gaps were identified against the chosen smart-budgeting direction: there was no calendar-month category-budget report, and message import only accepted the simplified sample syntax. A separate draft adds monthly category limits and spending feedback plus documented amount-first/verb-first debit and credit alert parsing. Eighteen focused JavaScript checks and module syntax checks passed. New Node regression tests are included but were not run. The execution environment is unavailable, so a fresh Node test run, Next.js build and browser QA remain required before merge or deployment. See docs/THEME-AUDIT.md. This does not change the earlier main-branch verification record or claim live Gemini verification.

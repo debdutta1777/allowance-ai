@@ -3,6 +3,7 @@ import { stripTypeScriptTypes } from 'node:module';
 
 await mkdir('public', { recursive: true });
 await cp('web', 'public', { recursive: true });
+await cp('src/alert-parser.js', 'public/alert-parser.js');
 await rename('public/index.html', 'public/planner.html');
 for (const name of ['forecast', 'sample', 'money', 'imports', 'insights', 'category-model']) {
   const source = await readFile(`src/${name}.ts`, 'utf8');
