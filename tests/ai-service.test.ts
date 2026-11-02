@@ -63,3 +63,14 @@ test('malformed session keys and arbitrary model URLs cannot reach a provider',a
   assert.equal((await handleAI(request({...explain,sessionKey:'short'}),{allowSessionKey:true,fetcher})).status,400);
   assert.equal((await handleAI(request(explain),{key:'test-only',model:'https://other.test',fetcher})).status,502);assert.equal(called,false);
 });
+
+test('invalid requests do not consume the provider allowance; exhausted allowance blocks the provider',async()=>{
+  let admissions=0,providerCalls=0;
+  const options={key:'test-only',admitRequest:()=>{admissions++;return false;},fetcher:async()=>{providerCalls++;throw new Error('Must not reach provider');}};
+  assert.equal((await handleAI(request({...explain,consent:false}),options)).status,400);
+  assert.equal((await handleAI(request({...explain,plan:null}),options)).status,400);
+  assert.equal(admissions,0);
+  const response=await handleAI(request(explain),options);
+  assert.equal(response.status,429);assert.equal(response.headers.get('cache-control'),'no-store');
+  assert.equal(admissions,1);assert.equal(providerCalls,0);
+});
