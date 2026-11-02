@@ -1,3 +1,4 @@
+import { setupMonthlyBudget } from './monthly-budget-ui.js';
 import { CATEGORIES, SAMPLE_CSV, SAMPLE_MESSAGES, parseImport, validateDraft, transactionKey, summarizeTransactions } from './imports.js';
 import { evidenceFor } from './insights.js';
 import { predictCategory } from './category-model.js';
@@ -8,6 +9,7 @@ const money=value=>new Intl.NumberFormat('en-IN',{style:'currency',currency:'INR
 const JOURNAL='allowance:journal:v1';
 export function setupExtensions({getPlan,getPurchase,isDirty}){
   let transactions=[],drafts=[],replaceMode=false,undo=null,delayDays=3,revision=0;
+  let monthlyBudget;
   let aiAvailable=false,aiBusy=false,serverAIAvailable=false,sessionKey='';
   try{
     const saved=JSON.parse(localStorage.getItem(JOURNAL)||'[]');
@@ -27,6 +29,7 @@ export function setupExtensions({getPlan,getPurchase,isDirty}){
     renderSummary();
   }
   function renderSummary(){
+    monthlyBudget?.refresh();
     $('journal-count').textContent=transactions.length?`${transactions.length} saved transactions`:'No imports yet';
     $('review-history').hidden=!transactions.length;$('clear-history').hidden=!transactions.length;$('undo-history').hidden=!undo;
     if(!transactions.length){$('spending-summary').innerHTML='<p class="empty-note">Start with the fictional sample. It includes a duplicate, an own-account transfer and a refund to review.</p>';return;}
@@ -161,6 +164,7 @@ export function setupExtensions({getPlan,getPurchase,isDirty}){
     $('ai-availability').textContent='Gemini session key supplied. It will be verified when you request an explanation.';
   });
   $('clear-session-key').addEventListener('click',()=>{sessionKey='';$('session-key').value='';aiAvailable=serverAIAvailable;setBusy(false);$('session-key-status').textContent='Session key cleared.';$('ai-availability').textContent=serverAIAvailable?'Server-configured Gemini is available.':'Local AI categorization is ready. Gemini needs a session key.';});
+  monthlyBudget=setupMonthlyBudget({getTransactions:()=>transactions,getStartDate:()=>getPlan().startDate});
   renderSummary();refresh();
   return {refresh,reset(){delayDays=3;$('delay-days').value='3';$('ai-consent').checked=false;$('ai-output').textContent='';if(transactions.length)clearHistory();else{$('review-panel').hidden=true;$('import-text').value='';}refresh();}};
 }
