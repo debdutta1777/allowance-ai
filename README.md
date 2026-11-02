@@ -3,7 +3,7 @@
 A student cash-flow planner answering: can I make this purchase and still cover essentials until my next allowance?
 
 ## Progress
-Phase 1: foundation. Product scope and design constraints recorded. A deterministic forecast module and automated tests are being added. The interface, import flow, AI service and deployment are not complete.
+Phase 1 complete: product scope and design constraints recorded; deterministic forecast module, synthetic fixture and 13 passing automated tests delivered. The interface, import flow, AI service and deployment are not complete.
 
 ## Phases
 1. Foundation: calculation contract, design requirements, synthetic fixture and tests.
