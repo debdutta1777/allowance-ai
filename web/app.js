@@ -1,6 +1,7 @@
 import { forecast, comparePurchase } from './forecast.js';
 import { samplePlan } from './sample.js';
 import { rupeesToPaise } from './money.js';
+import { setupExtensions } from './extensions.js';
 
 const $ = id => document.getElementById(id);
 const STORAGE = 'allowance:plan:v1';
@@ -12,7 +13,9 @@ let plan = structuredClone(samplePlan);
 let purchase = { amountPaise: 200000, date: '2026-11-04' };
 let custom = false;
 let planDirty = false;
+let purchaseDirty = false;
 let storageMessage = '';
+let extensions;
 try {
   const raw = localStorage.getItem(STORAGE);
   if (raw) {
@@ -69,6 +72,7 @@ function fillForms() {
 }
 
 function fillPurchase() {
+  purchaseDirty = false;
   $('purchase-amount').value = purchase.amountPaise / 100;
   $('purchase-date').value = purchase.date;
   $('purchase-date').min = plan.startDate;
@@ -139,6 +143,7 @@ function render() {
     const cell = amount => `<td class="${amount < 0 ? 'negative' : ''}">${escape(money(amount))}</td>`;
     return `<tr class="${compared.beforeIncomePaise < 0 ? 'shortfall' : ''}"><th scope="row">${dateLabel(day.date)}</th>${[day.incomePaise, day.expensesPaise, day.beforeIncomePaise, day.closingBalancePaise, compared.beforeIncomePaise, compared.closingBalancePaise].map(cell).join('')}</tr>`;
   }).join('');
+  extensions?.refresh();
 }
 
 $('plan-form').addEventListener('input', () => {
@@ -174,6 +179,7 @@ $('add-entry').addEventListener('click', () => {
   $('save-status').textContent = 'Unapplied changes. Complete the item and update the forecast.';
 });
 $('purchase-form').addEventListener('input', () => {
+  purchaseDirty = true;
   error('purchase-error', 'Purchase changed. Select Compare purchase to update the result.');
 });
 $('purchase-form').addEventListener('submit', event => {
@@ -183,6 +189,7 @@ $('purchase-form').addEventListener('submit', event => {
     const candidate = { date: $('purchase-date').value, amountPaise: rupeesToPaise($('purchase-amount').value) };
     comparePurchase(plan, candidate);
     purchase = candidate;
+    purchaseDirty = false;
     error('purchase-error');
     render(); persist();
   } catch (issue) { error('purchase-error', `${issue.message} The comparison still uses your last applied purchase.`); }
@@ -196,7 +203,9 @@ $('reset').addEventListener('click', () => {
   fillForms(); render();
   error('plan-error'); error('purchase-error');
   $('save-status').textContent = 'Fictional sample restored. Changes save when you update.';
+  extensions?.reset();
 });
 fillForms();
 render();
 if (storageMessage) $('save-status').textContent = storageMessage;
+extensions=setupExtensions({getPlan:()=>plan,getPurchase:()=>purchase,isDirty:()=>planDirty||purchaseDirty});

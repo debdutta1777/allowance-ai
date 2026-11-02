@@ -1,0 +1,262 @@
+{
+  "dataset": "Authored synthetic holdout descriptions, distinct from training strings",
+  "trainingExamples": 56,
+  "total": 23,
+  "correct": 23,
+  "accuracy": 1,
+  "limitations": "Small English-only synthetic evaluation. Not evidence of real-bank accuracy. Confidence is an uncalibrated score-margin label; all suggestions remain editable.",
+  "results": [
+    {
+      "description": "College canteen breakfast",
+      "expected": "Food",
+      "category": "Food",
+      "confidence": "low",
+      "source": "local-ml",
+      "tokensUsed": [
+        "college",
+        "canteen",
+        "breakfast"
+      ]
+    },
+    {
+      "description": "Weekend grocery delivery",
+      "expected": "Food",
+      "category": "Food",
+      "confidence": "high",
+      "source": "local-ml",
+      "tokensUsed": [
+        "grocery",
+        "delivery"
+      ]
+    },
+    {
+      "description": "Bakery evening snack",
+      "expected": "Food",
+      "category": "Food",
+      "confidence": "high",
+      "source": "local-ml",
+      "tokensUsed": [
+        "bakery",
+        "snack"
+      ]
+    },
+    {
+      "description": "City metro pass",
+      "expected": "Transport",
+      "category": "Transport",
+      "confidence": "high",
+      "source": "local-ml",
+      "tokensUsed": [
+        "metro",
+        "pass"
+      ]
+    },
+    {
+      "description": "Taxi station trip",
+      "expected": "Transport",
+      "category": "Transport",
+      "confidence": "high",
+      "source": "local-ml",
+      "tokensUsed": [
+        "taxi",
+        "trip"
+      ]
+    },
+    {
+      "description": "Railway commute",
+      "expected": "Transport",
+      "category": "Transport",
+      "confidence": "high",
+      "source": "local-ml",
+      "tokensUsed": [
+        "railway",
+        "commute"
+      ]
+    },
+    {
+      "description": "Student room rent",
+      "expected": "Housing",
+      "category": "Housing",
+      "confidence": "high",
+      "source": "local-ml",
+      "tokensUsed": [
+        "room",
+        "rent"
+      ]
+    },
+    {
+      "description": "Hostel water bill",
+      "expected": "Housing",
+      "category": "Housing",
+      "confidence": "high",
+      "source": "local-ml",
+      "tokensUsed": [
+        "hostel",
+        "water"
+      ]
+    },
+    {
+      "description": "Accommodation deposit",
+      "expected": "Housing",
+      "category": "Housing",
+      "confidence": "high",
+      "source": "local-ml",
+      "tokensUsed": [
+        "accommodation",
+        "deposit"
+      ]
+    },
+    {
+      "description": "Semester textbook purchase",
+      "expected": "Education",
+      "category": "Education",
+      "confidence": "high",
+      "source": "local-ml",
+      "tokensUsed": [
+        "semester",
+        "textbook"
+      ]
+    },
+    {
+      "description": "University exam registration",
+      "expected": "Education",
+      "category": "Education",
+      "confidence": "high",
+      "source": "local-ml",
+      "tokensUsed": [
+        "university",
+        "exam",
+        "registration"
+      ]
+    },
+    {
+      "description": "Library stationery supplies",
+      "expected": "Education",
+      "category": "Education",
+      "confidence": "high",
+      "source": "local-ml",
+      "tokensUsed": [
+        "library",
+        "stationery"
+      ]
+    },
+    {
+      "description": "Pharmacy consultation",
+      "expected": "Health",
+      "category": "Health",
+      "confidence": "high",
+      "source": "local-ml",
+      "tokensUsed": [
+        "pharmacy",
+        "consultation"
+      ]
+    },
+    {
+      "description": "Dentist medical appointment",
+      "expected": "Health",
+      "category": "Health",
+      "confidence": "high",
+      "source": "local-ml",
+      "tokensUsed": [
+        "dentist",
+        "medical",
+        "appointment"
+      ]
+    },
+    {
+      "description": "Chemist prescription",
+      "expected": "Health",
+      "category": "Health",
+      "confidence": "high",
+      "source": "local-ml",
+      "tokensUsed": [
+        "chemist",
+        "prescription"
+      ]
+    },
+    {
+      "description": "Retail shoes order",
+      "expected": "Shopping",
+      "category": "Shopping",
+      "confidence": "high",
+      "source": "local-ml",
+      "tokensUsed": [
+        "retail",
+        "shoes"
+      ]
+    },
+    {
+      "description": "Gadget headphones shop",
+      "expected": "Shopping",
+      "category": "Shopping",
+      "confidence": "high",
+      "source": "local-ml",
+      "tokensUsed": [
+        "gadget",
+        "headphones"
+      ]
+    },
+    {
+      "description": "Apparel backpack purchase",
+      "expected": "Shopping",
+      "category": "Shopping",
+      "confidence": "high",
+      "source": "local-ml",
+      "tokensUsed": [
+        "apparel",
+        "backpack"
+      ]
+    },
+    {
+      "description": "Music streaming renewal",
+      "expected": "Subscriptions",
+      "category": "Subscriptions",
+      "confidence": "high",
+      "source": "local-ml",
+      "tokensUsed": [
+        "music",
+        "streaming",
+        "renewal"
+      ]
+    },
+    {
+      "description": "Cloud software membership",
+      "expected": "Subscriptions",
+      "category": "Subscriptions",
+      "confidence": "high",
+      "source": "local-ml",
+      "tokensUsed": [
+        "cloud",
+        "software",
+        "membership"
+      ]
+    },
+    {
+      "description": "Broadband recharge",
+      "expected": "Subscriptions",
+      "category": "Subscriptions",
+      "confidence": "high",
+      "source": "local-ml",
+      "tokensUsed": [
+        "broadband",
+        "recharge"
+      ]
+    },
+    {
+      "description": "Unknown merchant XYZ",
+      "expected": "Other",
+      "category": "Other",
+      "confidence": "low",
+      "source": "local-ml",
+      "tokensUsed": []
+    },
+    {
+      "description": "Unlabelled payment abc",
+      "expected": "Other",
+      "category": "Other",
+      "confidence": "low",
+      "source": "local-ml",
+      "tokensUsed": []
+    }
+  ]
+}

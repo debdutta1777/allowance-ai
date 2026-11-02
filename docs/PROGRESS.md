@@ -53,12 +53,13 @@ Phase 3: supported CSV and message import, correction and duplicate handling. Ph
 AI provider selection and secure key configuration are needed in Phase 4. Do not request bank credentials or publish synthetic explanations as live AI.
 
 
-## Published preview
 
-Private Phase 2 preview successfully deployed at https://allowance-ledger-debdutta.mossymount.chatgpt.site .
+## Phases 3 to 5 review checkpoint, 3 November 2026 IST
 
-Site project: appgprj_6ae8fb6062f48191a045815f9305e6f6
-Deployment: appgdep_6ae8fd5e35708191aa64061baa73f74d
-Deployment source commit in the Sites source repository: 42388c549d62c11df00f39e78568c4f4de99dab4
+Phase 3 implemented: CSV file/paste import, strict quoted fields, dated messages, correction review, duplicate candidates, transfers and refunds, local history, saved-history editing and undo.
 
-Preserve this Site identity in future phases. The user-facing GitHub repository and Sites source repository use separate commit histories. The deployed runtime matches the Phase 2 code; this publication checkpoint was added to GitHub after deployment.
+Phase 4 implemented: local Naive Bayes category model plus Gemini structured-output service. Training uses 56 authored synthetic examples. The authored synthetic holdout contains 23 cases; all 23 matched the expected category. This small result is not real-world accuracy. The API adapter and owner-authorized session-key flow are tested with mocked provider responses. No actual Gemini key has been received or used.
+
+Phase 5 checks: 40 automated tests pass. TypeScript checking passed. Browser CSV upload, local category suggestions, category and amount corrections, duplicate exclusion, saved history on reload, repeat-import detection, clear/undo and unchanged forecast balance were verified. Desktop and 390-pixel embedded layouts were inspected; this is not physical-device verification. Sample correction produced INR 730 spending, INR 5,000 income, INR 100 refunds and INR 1,000 transfers while baseline minimum remained INR 1,050. Key setup is restricted by authenticated identity and the current private Sites audience.
+
+Final production build and TypeScript checks passed. Publication is being completed in this flow. Live Gemini verification still requires the owner's key, entered outside chat in the private review form. Do not label mocked tests as live provider verification.

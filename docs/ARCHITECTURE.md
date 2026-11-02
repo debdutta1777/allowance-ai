@@ -1,9 +1,29 @@
-# Architecture, Phase 2
+# Allowance architecture
 
-The application is a static browser interface. `web/app.js` owns draft input, rendering and local storage. `src/forecast.ts` owns date and money validation plus cash-flow arithmetic. `src/money.ts` parses decimal rupee text without floating-point multiplication. `src/sample.ts` contains the explicitly fictional fixture.
+## Client
 
-`scripts/build.mjs` copies web assets into dist and strips TypeScript from those same tested modules. It does not maintain a second forecast implementation. No third-party runtime dependencies or remote fonts are used. The static build can be deployed on Vercel or another static host. Server-side AI is deferred to Phase 4 and will require a server runtime.
+The planner is a normal HTML/CSS/module-JavaScript application, served as public/planner.html by Vinext. web/app.js owns applied plan state and draft edits. web/extensions.js owns import review, local history, delay scenarios and AI requests. Applied plans, imported history and draft edits are kept distinct. A pending edit must be applied before an AI explanation can use it.
 
-Opening balance precedes spending on the first date; both endpoints are inclusive. Expenses precede income on each date. The chart includes before-income and closing balances, and the numerical ledger explains that ordering. Forecasts should never be presented as guaranteed cash availability.
+## Deterministic engine
 
-Browser storage is best effort and can be cleared by reset. No data is sent to a model, bank or analytics service in Phase 2. Transaction import will need reconciliation and semantic duplicate detection before it feeds this engine.
+src/forecast.ts computes integer-paise balances using inclusive date-only horizons. Daily essentials and scheduled expenses precede same-day income. Purchase simulations never mutate their input. src/insights.ts computes delayed-income scenarios and a fixed ledger of evidence IDs. Imported history cannot cause a second deduction from the opening balance.
+
+## Import and local model
+
+src/imports.ts implements bounded CSV and dated-message parsing, validation, duplicate candidates and separate debit/income/refund/transfer totals. User corrections are validated again on save. src/category-model.ts implements a trained multinomial Naive Bayes merchant classifier with Laplace smoothing. Its training corpus and evaluation data are authored synthetic examples. Direction handling remains a clearly separate rule. No real-bank generalization or calibrated confidence is established.
+
+## Server AI
+
+app/api/ai/route.ts provides status and POST actions. lib/ai-service.ts validates bounded requests, requires consent and rejects cross-origin requests. The server recomputes all evidence rather than accepting client totals. Gemini generateContent uses a structured schema and the x-goog-api-key header. Prose containing numeric characters or currency symbols is rejected, and cited evidence IDs must exist in the computed ledger. These checks protect arithmetic and citation integrity, but do not guarantee that every natural-language suggestion is semantically correct.
+
+A provider key may come from GEMINI_API_KEY or a session key. Session keys require ALLOW_SESSION_KEYS=true plus platform-supplied authenticated identity; the deployment is currently owner-private. They are never stored or returned. The private owner enters the key on the website, outside chat. This review-mode route is not a durable credential store for judges. A server runtime secret is needed for shared submission use.
+
+The route limits requests per identity in a per-isolate memory window. This is best-effort rate limiting, not a durable cross-isolate quota. The provider request has a timeout, bounded output and no automatic retries. Errors never include provider response bodies or credentials. No request-body logging is implemented.
+
+## Hosting
+
+The existing Sites project identity and private audience are preserved. The .openai manifest declares Worker hosting without a static-only entry. No D1 or R2 resource is used. Browser history and preferences are local only; clearing browser data removes them. The GitHub repository and Sites source repository have distinct commit histories; runtime changes are mirrored to GitHub after verification.
+
+## Remaining live verification
+
+Provider behavior and owner-session setup must be checked with the owner's actual Gemini key after entry. All provider responses in the automated suite are mocks and all financial fixtures are synthetic.
