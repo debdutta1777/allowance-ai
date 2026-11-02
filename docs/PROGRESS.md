@@ -62,4 +62,14 @@ Phase 4 implemented: local Naive Bayes category model plus Gemini structured-out
 
 Phase 5 checks: 40 automated tests pass. TypeScript checking passed. Browser CSV upload, local category suggestions, category and amount corrections, duplicate exclusion, saved history on reload, repeat-import detection, clear/undo and unchanged forecast balance were verified. Desktop and 390-pixel embedded layouts were inspected; this is not physical-device verification. Sample correction produced INR 730 spending, INR 5,000 income, INR 100 refunds and INR 1,000 transfers while baseline minimum remained INR 1,050. Key setup is restricted by authenticated identity and the current private Sites audience.
 
-Final production build and TypeScript checks passed. Publication is being completed in this flow. Live Gemini verification still requires the owner's key, entered outside chat in the private review form. Do not label mocked tests as live provider verification.
+Final production build and TypeScript checks passed; the review version was deployed successfully. Live Gemini verification still requires the owner's key, entered outside chat in the private review form. Do not label mocked tests as live provider verification.
+
+
+## Final private review deployment
+
+Deployment succeeded at https://allowance-ledger-debdutta.mossymount.chatgpt.site .
+Sites source commit: 3734cd6ab43fc312349601842cc7e7835914f8ba
+Deployment ID: appgdep_6ae90585b6448191aab8388bc56f4642
+Environment revision: 2. ALLOW_SESSION_KEYS is enabled; no actual Gemini API key is configured.
+
+The current private audience is preserved. Signed-in owner visits can supply a Gemini key in tab memory through the review form. Live provider response and owner-form behavior await that visit and real key. This is a review-ready implementation with 40 passing tests, not a claim of completed live-AI verification or judge-ready public hosting.
