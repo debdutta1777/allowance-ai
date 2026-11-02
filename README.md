@@ -3,7 +3,7 @@
 A student cash-flow planner answering: can I make this purchase and still cover essentials until my next allowance?
 
 ## Progress
-Phase 1 complete: product scope and design constraints recorded; deterministic forecast module, synthetic fixture and 13 passing automated tests delivered. The interface, import flow, AI service and deployment are not complete.
+Phase 2 implemented: working ledger interface, editable expenses and expected income, purchase comparison, chart, daily table and browser-local saving. Fifteen automated tests pass. Transaction import and live AI remain pending.
 
 ## Phases
 1. Foundation: calculation contract, design requirements, synthetic fixture and tests.
@@ -28,4 +28,5 @@ Use real field labels, visible keyboard focus, plain loading text, accessible er
 AI may propose categories and explain verified results. Application code owns arithmetic. Credentials remain server-side. Never label fixture explanations as live AI responses. No AI provider or API key has been configured.
 
 ## Development
-Requires Node.js 24 or newer. Run `npm test` to execute the engine tests without third-party dependencies.
+Requires Node.js 24 or newer. Run `npm test` for the automated tests and `npm run build` to produce `dist/`. Deploy `dist/` on a static host for this phase. Source UI lives in `web/`; tested TypeScript modules in `src/` are stripped to browser JavaScript during the dependency-free build. The build uses Node.js's experimental TypeScript stripping API. Node.js 24 is required. Server-side AI will require a server runtime in Phase 4.
+

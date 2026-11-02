@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en-IN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#e6e1d6">
+  <meta name="description" content="Plan your essentials, test a purchase and see your cash-flow until your next allowance.">
+  <title>Allowance | Your money, in perspective</title>
+  <link rel="stylesheet" href="./styles.css">
+  <script type="module" src="./app.js"></script>
+</head>
+<body>
+  <a class="skip" href="#workspace">Skip to planner</a>
+  <header class="masthead">
+    <a class="wordmark" href="./" aria-label="Allowance home">allowance<span class="wordmark-rule" aria-hidden="true"></span></a>
+    <span class="edition">THE STUDENT CASH-FLOW PLANNER</span>
+    <button type="button" id="reset" class="text-button">Reset sample</button>
+  </header>
+  <main>
+    <section class="intro" aria-labelledby="page-title">
+      <div><p class="eyebrow">A LITTLE CLARITY BEFORE YOU SPEND</p><h1 id="page-title">Make room for<br><i>what matters.</i></h1></div>
+      <div class="intro-note"><p>Rent first. The rest, in perspective.</p><p>Put your upcoming costs on the calendar, then see what a purchase would leave you with.</p><span class="sample-label" id="mode-label">FICTIONAL STUDENT SCENARIO</span></div>
+    </section>
+    <nav class="planner-nav" aria-label="Planner sections"><a href="#plan-heading">Edit plan</a><a href="#forecast-heading">View forecast</a><a href="#purchase-heading">Test a purchase</a></nav>
+    <div class="workspace" id="workspace">
+      <aside class="plan-panel" aria-labelledby="plan-heading">
+        <div class="section-heading"><span class="section-number">01</span><h2 id="plan-heading">Your starting point</h2></div>
+        <form id="plan-form">
+          <label for="balance">Available balance <span>INR</span></label><input id="balance" name="balance" type="number" step="0.01" required aria-describedby="balance-help"><p class="field-help" id="balance-help">Balance before spending on your start date.</p>
+          <div class="date-pair"><div><label for="start">From</label><input id="start" type="date" required></div><div><label for="end">Through</label><input id="end" type="date" required></div></div>
+          <label for="essentials">Daily essentials <span>INR / DAY</span></label><input id="essentials" type="number" min="0" step="0.01" required aria-describedby="essentials-help"><p class="field-help" id="essentials-help">Food, commute and everyday needs. Exclude costs listed separately below.</p>
+          <div class="section-heading obligation-heading"><span class="section-number">02</span><h2>What’s coming up</h2></div>
+          <p class="field-help">Add bills and expected income. Dates outside the forecast are excluded.</p>
+          <div id="entries"></div>
+          <button id="add-entry" class="text-button add-entry" type="button">Add an expense or income</button>
+          <button class="primary-button" type="submit">Update forecast</button>
+          <p class="field-help storage-note" id="save-status" role="status">Changes are saved on this browser when you update.</p>
+          <p id="plan-error" class="error" role="alert" hidden></p>
+        </form>
+      </aside>
+      <section class="analysis" aria-labelledby="forecast-heading">
+        <div class="section-heading forecast-heading"><span class="section-number">03</span><h2 id="forecast-heading" tabindex="-1">The days ahead</h2><span id="date-range" class="range-label"></span></div>
+        <p id="excluded-note" class="field-help" hidden></p>
+        <div class="forecast-summary"><div><p class="eyebrow">LOWEST BALANCE · BEFORE PURCHASE</p><p class="large-number" id="baseline-min">Calculating</p><p class="metric-caption" id="baseline-caption"></p></div><div class="closing-metric"><p class="eyebrow">CLOSING BALANCE · BEFORE PURCHASE</p><p class="secondary-number" id="baseline-close"></p><p class="metric-caption">Includes expected income within this period</p></div></div>
+        <div class="chart-wrap"><svg id="chart" viewBox="0 0 780 285" role="img" aria-labelledby="chart-title chart-description"><title id="chart-title">Projected cash-flow comparison</title><desc id="chart-description"></desc></svg></div>
+        <div class="chart-legend"><span><span class="legend-line baseline" aria-hidden="true"></span>Without purchase</span><span><span class="legend-line proposed" aria-hidden="true"></span>With purchase</span><span class="chart-note">Spending before same-day income</span></div>
+        <section class="purchase-panel" aria-labelledby="purchase-heading">
+          <div class="purchase-intro"><p class="eyebrow">BEFORE YOU BUY</p><h2 id="purchase-heading">What if I spend it?</h2><p>Try a purchase against your essentials.</p></div>
+          <form id="purchase-form"><div><label for="purchase-amount">Purchase amount <span>INR</span></label><input type="number" id="purchase-amount" min="0" step="0.01" required></div><div><label for="purchase-date">Purchase date</label><input type="date" id="purchase-date" required></div><button class="primary-button" type="submit">Compare purchase</button></form>
+          <p id="purchase-error" class="error" role="alert" hidden></p>
+          <div id="purchase-result" class="purchase-result" role="status" aria-live="polite"></div>
+        </section>
+        <details class="daily-ledger"><summary>Open the daily ledger <span id="ledger-count"></span></summary><p class="field-help">Both minimums and closing balances are shown. A shortfall can occur before an allowance arrives on the same day.</p><div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable daily balance ledger"><table><caption class="sr-only">Daily baseline and purchase forecast in Indian rupees</caption><thead><tr><th scope="col">Date</th><th scope="col">Income</th><th scope="col">Costs</th><th scope="col">Before income</th><th scope="col">Closing</th><th scope="col">With purchase: low</th><th scope="col">With purchase: close</th></tr></thead><tbody id="ledger-body"></tbody></table></div></details>
+        <details class="assumptions"><summary>How this forecast is calculated</summary><p>Your opening balance is the starting point. Daily essentials and scheduled bills are deducted once per date. Expected income is added after that day’s expenses. This conservative order reveals shortfalls that an end-of-day balance can hide.</p><p>Both the start and end date are included. A forecast can cover up to 366 days. Existing transactions are already reflected in your starting balance. Do not list a cost twice. Future income may arrive late, so test a later date in your plan.</p><p>These are deterministic estimates from your inputs. AI explanations and transaction import are planned for later phases.</p></details>
+      </section>
+    </div>
+    <footer><span>ALLOWANCE / WORKING EDITION 02</span><p>Amounts in INR. Your plan stays in this browser. No bank connection.</p><a href="https://github.com/debdutta1777/allowance-ai" target="_blank" rel="noopener noreferrer">View source</a></footer>
+  </main>
+  <noscript><p class="error">Enable JavaScript to use the cash-flow planner. No account is required.</p></noscript>
+</body>
+</html>
