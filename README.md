@@ -2,19 +2,19 @@
 
 A student cash-flow planner answering: can I make this purchase and still cover essentials until my next allowance?
 
-## Theme alignment additions (draft, not yet validated in the full runtime)
+## Theme alignment
 
 The theme permits selecting a single finance use case. Allowance targets smart budgeting, not all six example tracks.
 
-This branch adds a calendar-month report with per-category spending limits, remaining/overspent amounts, explicit uncapped spending, and separate income/refund/transfer totals. Limits are saved per month in the current browser and do not automatically change the forecast opening balance. Totals cover only imported history, not a verified complete statement.
+The application includes a calendar-month report with per-category spending limits, remaining/overspent amounts, explicit uncapped spending, and separate income/refund/transfer totals. Limits are saved per month in the current browser and do not automatically change the forecast opening balance. Totals cover only imported history, not a verified complete statement.
 
 Message import additionally accepts documented dated debit/credit alert patterns with the currency before the verb or debit/credit by/with the currency. Dates must be explicit and use YYYY-MM-DD, DD-MM-YYYY or DD/MM/YYYY. Proper Indian/Western amount grouping and optional Ref/RRN/UTR references are handled. Missing dates, invalid amounts, failed/pending payments and collect requests are rejected. Pattern examples are synthetic; support for every bank or arbitrary SMS dialect is not claimed.
 
-Validation for these additions is limited to focused JavaScript checks and source syntax checks. The execution environment was unavailable, so the full Node test suite, Next.js build and rendered UI checks have not run for this branch. Keep the pull request in draft until those checks pass. The 43-test result below describes the earlier main-branch revision.
+Full test and production-build validation ran in GitHub Actions on Node.js 24. Focused calculation/parsing checks and five mock-DOM budget wiring checks also passed. Fresh rendered UI verification was unavailable because the local browser/execution environment was unavailable; this limitation remains explicit.
 
 ## Review status
 
-The complete review interface now includes transaction import, correction, duplicate review, on-device ML categorization, cash-flow forecasts, purchase comparisons, income-delay stress testing and a Gemini explanation endpoint. Forty-three automated tests pass. Real Gemini responses still require the owner's API key and live verification; mocked provider tests are not a claim of live operation.
+The complete review interface now includes transaction import, correction, duplicate review, on-device ML categorization, cash-flow forecasts, purchase comparisons, income-delay stress testing and a Gemini explanation endpoint. The expanded automated test suite passes. Real Gemini responses still require the owner's API key and live verification; mocked provider tests are not a claim of live operation.
 
 Private preview: https://allowance-ledger-debdutta.mossymount.chatgpt.site
 

@@ -1,27 +1,34 @@
 # Theme alignment audit
 
-Allowance chooses the permitted smart-budgeting direction. Investing, tax, live trading, fraud detection and GST automation are alternative ideas in the supplied theme, not simultaneous requirements.
+Allowance chooses the permitted smart-budgeting direction. Investing, tax, trading, fraud detection and GST automation are alternative ideas in the supplied theme, not simultaneous requirements.
 
-| User need | Existing main branch | Draft addition |
-| --- | --- | --- |
-| Bring in transactions | CSV upload/paste and a simplified dated message format | Two additional documented debit/credit alert patterns |
-| Clean the data | Review, corrections, duplicate exclusion, transfer/refund separation | Existing validation retained |
-| Use AI meaningfully | Local merchant classifier; server Gemini explanation integration | Existing AI stays unchanged |
-| Manage a monthly budget | Spending totals across all imported dates | Calendar month selection and category limits, remaining/overspent amounts |
-| Make a money decision | Purchase simulation, obligations, essentials and delayed-income forecast | Monthly overspending feedback complements the forecast |
-| Explain results | Calculated evidence; Gemini prose requires known evidence IDs | Existing safeguards retained |
-| Be usable for judges | Fictional demo, source and Vercel configuration | Final live provider test and draft verification still required |
+| User need | Implemented behavior |
+| --- | --- |
+| Bring in transactions | CSV upload/paste, simplified dated messages and two additional documented debit/credit alert patterns |
+| Clean the data | Review, corrections, duplicate exclusion, transfer/refund separation |
+| Use AI meaningfully | Local merchant classifier and server-side Gemini explanation integration |
+| Manage a monthly budget | Calendar month selection, category limits, actual spending, remaining/overspent amounts and uncapped spending |
+| Make a money decision | Purchase simulation, obligations, essentials and delayed-income forecast |
+| Explain results | Calculated evidence and known evidence IDs for Gemini responses |
+| Present a usable demo | Fictional sample, public source, Vercel configuration and demonstration notes |
 
-## Verification status
+## Verified checks
 
-The earlier main-branch version passed 43 tests and a Next.js production build. This audit does not claim those checks cover the new changes.
+The corrected feature commit 890bb85d3c54e0344dbb81052712ad231b9bb3c1 passed dependency installation, the full Node test suite and the Next.js production build on Node.js 24 in GitHub Actions:
+https://github.com/debdutta1777/allowance-ai/actions/runs/41538873457
 
-Eighteen focused checks executed the new JavaScript calculation/parsing source in the orchestration runtime: month boundaries, transfer/refund/income separation, zero/absent budgets, remaining/overspent amounts, invalid dates and explicit dated alert parsing/rejection. Syntax checks were also performed on the new UI modules. Node regression test files are included, but could not run in the unavailable execution environment.
+Nine Node regression tests were added. Focused pure-JavaScript parsing and monthly-summary checks also passed, along with five mock-DOM wiring checks for empty history, overspending, separate month limits, restoring a selected month's limits and refreshing after history removal.
 
-Before merging this draft, run npm test and npm run build on Node.js 24, then inspect the monthly budget section and message-import review on desktop and mobile. Confirm that importing/clearing/undoing history refreshes the monthly report, month limits persist separately, missing limits differ from zero, and forecast balances do not change when budgets or history change.
+The local execution environment and browser are unavailable, so fresh visual rendering of the new monthly section was not verified. This limitation is separate from the successful full test/build result.
 
-A real Gemini request must still be tested after GEMINI_API_KEY is configured on the deployed server. No secret was requested or included.
+A real Gemini request still needs to be verified after GEMINI_API_KEY is configured on the deployed server. No secret was requested or included.
 
 ## Boundaries
 
-The alert examples are authored examples matching explicitly supported patterns. Arbitrary bank messages, missing-date inference, PDFs, live bank integration and a complete bank feed are not implemented. Monthly reports cover imported records only. Refunds remain separate rather than automatically replenishing a spending category. User-selected monthly limits do not automatically set cash-flow essentials or enforce purchase category limits.
+The alert examples are authored examples matching explicitly supported patterns, not a claim of universal bank-SMS compatibility. Missing dates are never inferred. PDF statements, live bank feeds, arbitrary SMS dialects and unrelated finance tracks are not implemented.
+
+Monthly reports cover imported records only. Incoming refunds and own-account transfers remain separate from category spending. Blank limits are unset; zero limits are real zero budgets. Limits are saved separately per calendar month. User-selected limits and imported history cannot automatically change the opening balance, forecast essentials or purchase-category limits.
+
+## Final deployment check
+
+Deploy the latest main branch to Vercel, configure the Gemini environment secret, then check the monthly table at desktop/mobile widths and complete one live explanation using the fictional sample. Trading is not part of this entry; no real-money trading integration exists.

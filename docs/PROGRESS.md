@@ -89,3 +89,8 @@ Owner next step: import the repository into Vercel, configure GEMINI_API_KEY in 
 ## Theme audit draft, 3 November 2026 IST
 
 Two gaps were identified against the chosen smart-budgeting direction: there was no calendar-month category-budget report, and message import only accepted the simplified sample syntax. A separate draft adds monthly category limits and spending feedback plus documented amount-first/verb-first debit and credit alert parsing. Eighteen focused JavaScript checks and module syntax checks passed. New Node regression tests are included but were not run. The execution environment is unavailable, so a fresh Node test run, Next.js build and browser QA remain required before merge or deployment. See docs/THEME-AUDIT.md. This does not change the earlier main-branch verification record or claim live Gemini verification.
+
+
+## Theme audit completed through repository checks, 3 November 2026 IST
+
+The additions were merged through PR #1 after the corrected feature commit passed full npm test and npm run build checks in GitHub Actions on Node.js 24. Run: https://github.com/debdutta1777/allowance-ai/actions/runs/41538873457 . The earlier draft verification limitation for Node/build is superseded by this successful remote run. Fresh rendered UI checks remain unavailable, and live Gemini still requires the owner's configured server key. Monthly category budgets and supported dated bank alerts are now in main. This closes the two identified code gaps against the selected smart-budgeting direction; the other listed finance tracks are alternatives.
