@@ -2,7 +2,7 @@ import { evidenceFor } from '../src/insights.ts';
 import { CATEGORIES } from '../src/imports.ts';
 import type { Plan } from '../src/forecast.ts';
 
-type Options = { key?:string; model?:string; fetcher?:typeof fetch; allowSessionKey?:boolean };
+type Options = { key?:string; model?:string; fetcher?:typeof fetch; allowSessionKey?:boolean; admitRequest?:()=>boolean };
 const json=(body:unknown,status=200)=>Response.json(body,{status,headers:{'Cache-Control':'no-store','X-Content-Type-Options':'nosniff'}});
 const objectSchema=(properties:Record<string,unknown>)=>({type:'object',properties,required:Object.keys(properties),additionalProperties:false});
 function geminiSchema(schema:any):any {
@@ -54,6 +54,7 @@ export async function handleAI(request:Request,options:Options):Promise<Response
   try{
     const model=options.model??'gemini-3.5-flash-lite';
     if(!/^gemini-[a-z0-9.-]+$/.test(model))throw new Error('Invalid model configuration.');
+    if(options.admitRequest&&!options.admitRequest())return json({error:'Please wait a minute before another AI request.'},429);
     const response=await (options.fetcher??fetch)(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`,{
       method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':apiKey},signal:AbortSignal.timeout(25000),
       body:JSON.stringify({systemInstruction:{parts:[{text:instructions}]},contents:[{role:'user',parts:[{text:JSON.stringify(context)}]}],generationConfig:{maxOutputTokens:2200,responseMimeType:'application/json',responseSchema:geminiSchema(schema)}})

@@ -138,7 +138,7 @@ export function setupExtensions({getPlan,getPurchase,isDirty}){
       if(Number($('delay-days').value)!==delayDays)throw new Error('Select Test income delay to apply the edited delay first.');
       const version=revision;$('ai-output').textContent='Preparing an interpretation of the calculated evidence.';
       const result=await requestAI({action:'explain',plan:getPlan(),purchase:getPurchase(),delayDays});
-      if(version!==revision){$('ai-output').textContent='The plan changed during the request. Request a fresh interpretation.';return;}
+      if(version!==revision||isDirty()||Number($('delay-days').value)!==delayDays){$('ai-output').textContent='The plan changed during the request. Request a fresh interpretation.';return;}
       $('ai-output').innerHTML=`<p class="eyebrow">LIVE AI INTERPRETATION · GEMINI</p><p>${escape(result.overview)}</p><p>${escape(result.suggestion)}</p><h3>Evidence referenced</h3><dl>${result.evidence.map(fact=>`<div><dt>${escape(fact.label)}</dt><dd>${escape(fact.type==='money'?money(fact.value):fact.value)}</dd></div>`).join('')}</dl>`;
     }catch(issue){$('ai-output').textContent=issue.name==='TimeoutError'?'AI timed out. Your plan and calculations are unchanged.':issue.message;}
   });
