@@ -21,7 +21,7 @@ export function parseDatedAlert(value) {
   const verbs = new Set((line.match(/\b(?:debited|credited)\b/gi) ?? []).map(word => word.toLowerCase()));
   if (verbs.size !== 1) return null;
   const amountFirst = line.match(/(?:INR|Rs\.?|₹)\s*(\d+(?:,\d+)*(?:\.\d{1,2})?)\s+(debited|credited)\b/i);
-  const verbFirst = line.match(/\b(debited|credited)\s+(?:by|with)\s+(?:INR|Rs\.?|₹)\s*(\d+(?:,\d+)*(?:\.\d{1,2})?)/i);
+  const verbFirst = line.match(/\b(debited|credited)\s+(?:by|with)\s+(?:INR|Rs\.?|₹)\s*(\d+(?:,\d+)*(?:\.\d{1,2})?)(?=\s|$)/i);
   if (!amountFirst && !verbFirst) return null;
   const amount = normalizeAmount(amountFirst ? amountFirst[1] : verbFirst[2]);
   const verb = amountFirst ? amountFirst[2] : verbFirst[1];

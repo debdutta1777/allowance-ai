@@ -18,7 +18,7 @@ test('simplified messages remain backward compatible',()=>{
   const parsed=parseDatedAlert('2026-10-29 INR 180.00 debited to Campus Canteen ref DEMO001');assert.ok(parsed);assert.equal(parsed.description,'Campus Canteen');assert.equal(parsed.reference,'DEMO001');
 });
 test('ambiguous or unposted alerts never create transactions',()=>{
-  for(const line of ['INR 100 debited to Cafe','INR 100 debited on 31-02-2026 to Cafe Ref ABCD','INR 1,2 debited on 03-11-2026 to Cafe Ref ABCD','INR 100 debited on 03-11-2026 to Cafe Ref ABCD failed','UPI collect request for INR 100','INR 100 debited and INR 100 credited on 03-11-2026 to Cafe Ref ABCD']){
+  for(const line of ['INR 100 debited to Cafe','INR 100 debited on 31-02-2026 to Cafe Ref ABCD','INR 1,2 debited on 03-11-2026 to Cafe Ref ABCD','INR 100 debited on 03-11-2026 to Cafe Ref ABCD failed','UPI collect request for INR 100','Your A/c debited by INR 1.999 on 03-11-2026 to Cafe Ref ABCD','Your A/c debited by INR 1e3 on 03-11-2026 to Cafe Ref ABCD','INR 100 debited and INR 100 credited on 03-11-2026 to Cafe Ref ABCD']){
     assert.equal(parseDatedAlert(line),null);
     assert.throws(()=>parseImport(line,'messages'),/unsupported/);
   }
