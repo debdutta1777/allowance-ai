@@ -10,7 +10,7 @@
 
 ## Connect a separate Supabase project
 
-Do not use or modify AuditEase, AuditEaseD or Eventora. The owner's existing connected account has no Allowance project. A new account/project must be connected and identified before applying the SQL. No existing project was modified during implementation.
+Do not use or modify AuditEase, AuditEaseD or Eventora. The new Supabase connection now identifies a separate empty project, `tdjakwizemetwaiqrrim`, in organization `aocbksjdbchmtyspuidc`. The Allowance schema was applied there on 3 November 2026. AuditEase/Eventora projects were not modified.
 
 1. Connect the intended Supabase account in ChatGPT Apps. Choose the dedicated Allowance organization/project. Check and agree any project cost before creating it.
 2. Apply `supabase/schema.sql` only to that project. It creates one workspace per `auth.users.id`, enables RLS, revokes anonymous/public access and limits authenticated roles to ordinary data operations. It does not grant TRUNCATE. Each SELECT/UPDATE/DELETE policy checks ownership; INSERT/UPDATE also check the resulting owner.
@@ -41,3 +41,14 @@ Gemini is restricted to verified signed-in users, receives approved plan inputs 
 6. Small business: fixed-rate reducing-balance EMI, constant monthly cash-flow scenarios and user-entered GST arithmetic with an exportable estimate. No GST classification, compliant tax invoice, e-invoicing or return filing.
 
 The work in this phase concerns application structure, functional tools and account integration. A separate visual design pass remains planned.
+
+## Verification checkpoint, 3 November 2026 IST
+
+- GitHub Actions run 41560130776 passed npm ci, all 65 tests and the full production build for commit 22cdce5.
+- Production-only exact-lockfile audit: zero known advisories.
+- Applied `allowance_private_workspaces` to the new dedicated Supabase project after confirming no public tables and no users existed.
+- Executed the transactional two-identity isolation test: each identity could read only its own row, foreign updates affected zero rows and owner reassignment was rejected. Fixtures were rolled back; auth user and workspace row counts returned to zero.
+- Supabase security advisor: no lints. Authenticated table grants are SELECT/INSERT/UPDATE/DELETE only; anonymous/public grants are absent.
+- Vercel review builds are Ready, but preview URLs are protected by Vercel Authentication. The local managed preview served HTML but interactive scripts did not load, so browser flow checks are not yet passed.
+- The installed Vercel plugin supplies skills, but no account-management tools were exposed. Vercel CLI 65.4.0 reports loggedIn=false. Authorization is needed to set SUPABASE_URL and SUPABASE_PUBLISHABLE_KEY, inspect Auth callback/email configuration and perform deployed signup/save/reload/logout checks.
+- PR #3 remains a draft; the public production application was not replaced with an unconfigured account service.

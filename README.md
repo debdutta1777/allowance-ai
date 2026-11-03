@@ -10,7 +10,7 @@ Use Node.js 24, `npm ci`, `npm test`, then `npm run dev`. Run `npm run build` be
 
 ## Database activation is required
 
-Account code is implemented, but live sign-up and storage require a separate configured Supabase project. The owner's existing AuditEase and Eventora projects must not be modified. Until the new project is connected and configured, account forms are disabled and the guest demo remains available. See [service setup](docs/SERVICE-SETUP.md) for schema, ownership tests, email configuration and Vercel environment settings.
+Account code is implemented, but live sign-up and storage require a separate configured Supabase project. The new dedicated Supabase project is connected and its RLS schema and two-user isolation checks have passed. AuditEase and Eventora were not modified. Vercel environment variables and deployed authentication/email flow checks remain pending; account forms stay disabled until the hosting configuration is present. See [service setup](docs/SERVICE-SETUP.md) for schema, ownership tests, email configuration and Vercel environment settings.
 
 ## Tool scope
 
