@@ -5,7 +5,7 @@
 ## Passed
 
 - 65 automated tests, TypeScript and full production build passed. Production-only dependency audit reported zero known advisories.
-- Dedicated Supabase schema applied to tdjakwizemetwaiqrrim. Transactional two-identity RLS read/update/owner-reassignment tests passed; all fixtures rolled back. Security advisor returned no lints. Existing AuditEase/Eventora projects were not modified.
+- Dedicated Supabase schema applied to tdjakwizemetwaiqrrim. Transactional two-identity RLS read/update/owner-reassignment tests passed; all fixtures rolled back. The initial security advisor returned no lints; the current Auth advisory is recorded below. Existing AuditEase/Eventora projects were not modified.
 - Configured SUPABASE_URL and SUPABASE_PUBLISHABLE_KEY in allowance-ai-m9ry's Production, Preview and Development environments. Existing GEMINI_API_KEY was preserved. The redeployed preview reports configured=true and user=null when signed out.
 - Authenticated CLI tests: GET account session 200; signed-out workspace 401; cross-origin workspace write 403; signed-out Gemini request 401. Deployment provenance confirms the intended branch and source commit.
 - Browser access succeeded through the owner's Vercel/GitHub sign-in. Deployment protection remains enabled. No temporary share URL was created: automatic approval review rejected that action because link holders could access the protected preview.
@@ -39,6 +39,22 @@ Verified on the stable feature-branch preview alias on 3 November 2026:
 - Saved and reloaded the approved production Site URL and four exact confirmation/recovery callbacks for production and the stable branch-preview alias. No wildcard callbacks were added.
 - SMTP inspection confirmed custom SMTP is disabled. Default templates remain in place and email confirmation remains enabled.
 
-## Still pending; do not call these complete
+## Additional verification, 3 November 2026
 
-Password recovery and password change still need the owner's private interaction. Custom email delivery must be configured before public account onboarding. New work remains in draft PR #3, separate from the existing production site until the remaining account checks pass. UI/UX redesign remains deferred. Fictional QA plan, transaction and monthly limit remain in the owner's preview workspace for inspection.
+- GitHub Actions run 41622974774 completed successfully for 9095751 (tests and production build).
+- Two authenticated tabs loaded the same revision. The first saved a fictional display-name edit; the stale second save was rejected with “A newer version was saved elsewhere.” No newer data was overwritten.
+- The stale tab exported valid JSON including its unsaved marker and all workspace sections. The saved display name was restored to its original blank value and verified after reload. The stale tab was closed.
+- Guest demo showed its separate synthetic forecast and no saved transactions. Returning to the account restored INR 7,000 forecast, INR 250 spending and one saved transaction.
+- Live database inspection confirmed RLS, owner predicates on every operation, UPDATE ownership checks, ordinary authenticated grants only and no anonymous/public grants.
+- Browser console review found extension-origin metadata errors; no application-origin errors were observed in the sampled logs.
+- Current Supabase security advisor reports Leaked Password Protection Disabled. Official documentation makes this feature Pro-plan-only; the project remains Free and was not upgraded.
+- Vercel connector deployment-list read returned 403. The prior CLI path was no longer installed, so no fresh deployment-status claim was made. Browser preview and GitHub CI were accessible.
+
+## Remaining and deliberately deferred
+
+- Password recovery and password change remain unverified at the user's explicit request. Do not block UI/UX work on a forced password change.
+- Custom SMTP is disabled. Supabase's default email delivery only permits project-team addresses, so general public email signup is not ready. Documentation: https://supabase.com/docs/guides/auth/auth-smtp
+- Leaked-password protection is not enabled on the Free project. Documentation: https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection
+- The per-user Gemini rate allowance is per server instance; it is not a durable aggregate spending cap. No paid quota service was introduced.
+- The new service remains in draft PR #3 and the branch preview. Existing production has not been replaced. UI/UX work can proceed while public email delivery is configured.
+- Fictional QA plan, one transaction and monthly limit remain in the owner's preview workspace for inspection. No real financial data was used.
