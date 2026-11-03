@@ -27,6 +27,18 @@
 | Small business | EMI 8,791.59; total repayment 105,499.06. Cash projection closes at 20,000 in month six. Subtotal 10,000 plus entered GST 18% gives 11,800. |
 | Preferences and dashboard | Demo display name persists across navigation; dashboard retains seven imported records and November spending 1,250.50. |
 
+## Live account verification
+
+Verified on the stable feature-branch preview alias on 3 November 2026:
+
+- The owner completed account creation and email confirmation manually. The app displayed the signed-in identity and an empty private workspace.
+- Saved a fictional plan with opening balance INR 10,000 and daily essentials INR 100. Reload restored the plan and INR 7,000 minimum/closing forecast.
+- Imported one explicitly fictional INR 250 Food debit dated 2026-11-03, set a November Food limit of INR 1,000, saved and reloaded. Both transaction and limit persisted; remaining allowance was INR 750.
+- Gemini returned an interpretation after explicit consent to send this fictional plan. No actual personal financial data was used.
+- Sign-out returned to the sign-in screen. A fresh password sign-in restored the same plan, one transaction and INR 250 November spending.
+- Saved and reloaded the approved production Site URL and four exact confirmation/recovery callbacks for production and the stable branch-preview alias. No wildcard callbacks were added.
+- SMTP inspection confirmed custom SMTP is disabled. Default templates remain in place and email confirmation remains enabled.
+
 ## Still pending; do not call these complete
 
-The Supabase dashboard email/password sign-in reached hCaptcha and did not finish. Its confirmation/recovery URL allowlist and email delivery configuration still need inspection and setup. No authentication protection was disabled. A real account's signup, email confirmation, password login, save/reload across sessions, recovery and logout have not yet been tested. New work remains in draft PR #3, separate from the existing production site until those account flows pass. UI/UX redesign remains deferred.
+Password recovery and password change still need the owner's private interaction. Custom email delivery must be configured before public account onboarding. New work remains in draft PR #3, separate from the existing production site until the remaining account checks pass. UI/UX redesign remains deferred. Fictional QA plan, transaction and monthly limit remain in the owner's preview workspace for inspection.
