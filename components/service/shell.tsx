@@ -1,0 +1,12 @@
+'use client';
+import Link from 'next/link';
+import {usePathname} from 'next/navigation';
+import {useState} from 'react';
+import {WorkspaceProvider,useWorkspace} from './workspace-context';
+export const sections=[['dashboard','Dashboard'],['planner','Planner'],['transactions','Transactions'],['budgets','Monthly budgets'],['investing','Investing & portfolio'],['markets','Trading & markets'],['tax','Tax helper'],['safety','Scam & fraud checks'],['business','Small business'],['settings','Settings']] as const;
+function Frame({demo,children}:{demo:boolean;children:React.ReactNode}){
+  const path=usePathname(),w=useWorkspace(),[error,setError]=useState('');
+  async function signOut(){if(w.dirty&&!window.confirm('Unsaved edits will be lost. Cancel to save or export them first.'))return;try{const response=await fetch('/api/auth/sign-out',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'});if(!response.ok)throw new Error();window.location.replace('/sign-in');}catch{setError('Sign-out failed. Retry before leaving a shared device.');}}
+  return <div className="service-shell"><a className="skip" href="#page-content">Skip to page</a><aside className="sidebar"><Link href="/" className="wordmark">allowance</Link><p className="eyebrow">PERSONAL FINANCE WORKSPACE</p><nav aria-label="Workspace pages">{sections.map(([slug,label])=><Link key={slug} href={`/${demo?'demo':'app'}/${slug}`} aria-current={path===`/${demo?'demo':'app'}/${slug}`?'page':undefined}>{label}</Link>)}</nav><div className="sidebar-bottom">{demo?<><p>Fictional demo</p><Link href="/sign-up">Create a personal account</Link></>:<><p>{w.email}</p><button onClick={signOut}>Sign out</button>{w.dirty&&<small>Save or export your edits before signing out.</small>}</>}<p role="status">{error}</p><Link href="/">Back to home</Link></div></aside><div className="workspace-main"><header className="workspace-bar"><span>{demo?'DEMO WORKSPACE':'PRIVATE WORKSPACE'}</span><span role="status">{w.status}</span>{!demo&&<button onClick={w.save} disabled={!w.dirty||w.busy}>{w.busy?'Saving…':'Save workspace'}</button>}</header><main id="page-content">{children}</main><footer className="workspace-footer">Amounts in INR. No bank or broker connection. Only reviewed inputs you approve are sent to Gemini.</footer></div></div>;
+}
+export function ServiceShell({demo,children}:{demo:boolean;children:React.ReactNode}){return <WorkspaceProvider demo={demo}><Frame demo={demo}>{children}</Frame></WorkspaceProvider>;}

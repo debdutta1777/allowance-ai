@@ -1,3 +1,4 @@
 import type { Metadata } from 'next';
-export const metadata: Metadata = { title: 'Allowance | Student cash-flow planner', description: 'Understand spending, plan essentials and compare a purchase before your next allowance.' };
+import './service.css';
+export const metadata: Metadata = { title: 'Allowance | Personal finance workspace', description: 'A personal workspace for budgeting, investment scenarios, historical market analysis, tax estimates, payment safety and business cash flow.' };
 export default function RootLayout({ children }: { children: React.ReactNode }) { return <html lang="en-IN"><body>{children}</body></html>; }

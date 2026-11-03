@@ -1,0 +1,10 @@
+'use client';
+import {useState} from 'react';
+export const money=(paise:number)=>new Intl.NumberFormat('en-IN',{style:'currency',currency:'INR'}).format(paise/100);
+export const rupees=(value:number)=>money(Math.round(value*100));
+export function Field({label,...props}:React.InputHTMLAttributes<HTMLInputElement>&{label:string}){return <label>{label}<input {...props}/></label>;}
+export function NumberField({label,value='0',name,min='0',max,step='0.01'}:{label:string;value?:string;name:string;min?:string;max?:string;step?:string}){return <Field label={label} name={name} type="number" defaultValue={value} min={min} max={max} step={step} required/>;}
+export function PageTitle({title,description}:{title:string;description:string}){return <header className="page-title"><p className="eyebrow">ALLOWANCE / YOUR WORKSPACE</p><h1>{title}</h1><p>{description}</p></header>;}
+export function download(name:string,text:string,type='application/json'){const url=URL.createObjectURL(new Blob([text],{type}));const anchor=document.createElement('a');anchor.href=url;anchor.download=name;anchor.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
+export function ToolForm({button='Calculate',children,calculate}:{button?:string;children:React.ReactNode;calculate:(values:FormData)=>React.ReactNode}){const [result,setResult]=useState<React.ReactNode>(null),[error,setError]=useState('');return <><form className="tool-form" onSubmit={event=>{event.preventDefault();try{setResult(calculate(new FormData(event.currentTarget)));setError('');}catch(issue){setResult(null);setError(issue instanceof Error?issue.message:'Check your inputs.');}}}>{children}<button>{button}</button></form>{error&&<p role="alert" className="error">{error}</p>}<div aria-live="polite" className={result?'tool-result':''}>{result}</div></>;}
+export const num=(f:FormData,name:string)=>{const value=String(f.get(name)??'').trim();if(!value||!Number.isFinite(Number(value)))throw new Error('Complete all numerical inputs.');return Number(value);};
