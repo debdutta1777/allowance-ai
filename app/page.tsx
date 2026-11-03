@@ -1,2 +1,131 @@
-import { redirect } from 'next/navigation';
-export default function Home() { redirect('/planner.html'); }
+import Link from "next/link";
+export default function Home() {
+  return (
+    <main className="landing">
+      <header className="landing-bar">
+        <Link className="wordmark" href="/">
+          allowance
+        </Link>
+        <nav aria-label="Main navigation">
+          <Link href="/demo/dashboard">Explore the demo</Link>
+          <Link href="/sign-in">Sign in</Link>
+          <Link className="button-link" href="/sign-up">
+            Create account
+          </Link>
+        </nav>
+      </header>
+      <section className="landing-intro">
+        <p className="eyebrow">A PERSONAL WORKSPACE FOR MONEY DECISIONS</p>
+        <h1>
+          Understand your money.
+          <br />
+          Plan the next decision.
+        </h1>
+        <p>
+          Bring your spending into view, make room for monthly essentials and
+          explore financial questions in one organized workspace.
+        </p>
+        <div className="actions">
+          <Link className="button-link" href="/sign-up">
+            Start your personal workspace
+          </Link>
+          <Link href="/demo/dashboard">Try it with fictional data</Link>
+        </div>
+      </section>
+      <section className="landing-example">
+        <div>
+          <p className="eyebrow">A WORKING EXAMPLE / FICTIONAL INPUTS</p>
+          <h2>
+            Before the purchase,
+            <br />
+            check the days ahead.
+          </h2>
+          <p>
+            With INR 6,400 available, daily essentials and upcoming bills leave
+            a lowest baseline balance of INR 1,050. A proposed INR 2,000
+            purchase would take that minimum to −INR 950.
+          </p>
+          <Link href="/demo/planner">Open this calculation in the planner</Link>
+        </div>
+        <dl className="evidence">
+          <div>
+            <dt>Opening balance</dt>
+            <dd>₹6,400.00</dd>
+          </div>
+          <div>
+            <dt>Daily essentials</dt>
+            <dd>₹150.00</dd>
+          </div>
+          <div>
+            <dt>Lowest before purchase</dt>
+            <dd>₹1,050.00</dd>
+          </div>
+          <div>
+            <dt>Lowest with purchase</dt>
+            <dd>−₹950.00</dd>
+          </div>
+        </dl>
+      </section>
+      <section className="landing-directory">
+        <h2>Six areas. Separate places to work.</h2>
+        <div className="directory-list">
+          {[
+            [
+              "planner",
+              "01 / Smart budgeting",
+              "Plan monthly essentials, import spending and compare a purchase.",
+            ],
+            [
+              "investing",
+              "02 / Investing & portfolio",
+              "Understand SIPs and index funds, model contributions and review allocations.",
+            ],
+            [
+              "markets",
+              "03 / Trading & markets",
+              "Backtest a moving-average strategy on historical prices. No real-money trading.",
+            ],
+            [
+              "tax",
+              "04 / Tax helper",
+              "Compare a supported salary scenario under old and new tax regimes.",
+            ],
+            [
+              "safety",
+              "05 / Scam & fraud checks",
+              "Flag common warning signs in a payment message locally.",
+            ],
+            [
+              "business",
+              "06 / Small business finance",
+              "Explore cash flow, EMI payments and invoice tax estimates.",
+            ],
+          ].map(([slug, title, copy]) => (
+            <Link href={"/demo/" + slug} key={slug}>
+              <h3>{title}</h3>
+              <p>{copy}</p>
+              <span>Explore the working tool</span>
+            </Link>
+          ))}
+        </div>
+      </section>
+      <section className="landing-data">
+        <h2>A workspace that belongs to your account.</h2>
+        <p>
+          Signed-in users can save plans, reviewed transactions, budgets and
+          holdings to their own workspace once account storage is configured.
+          The guest demo uses fictional data and resets on reload. AI
+          interpretation is optional and requires your explicit consent.
+        </p>
+        <p>
+          No bank or broker connection. Calculators show assumptions and limits
+          alongside their results.
+        </p>
+      </section>
+      <footer className="landing-bar">
+        <span>ALLOWANCE / PERSONAL FINANCE WORKSPACE</span>
+        <Link href="/sign-in">Go to your account</Link>
+      </footer>
+    </main>
+  );
+}
