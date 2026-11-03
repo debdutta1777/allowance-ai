@@ -44,11 +44,14 @@ The work in this phase concerns application structure, functional tools and acco
 
 ## Verification checkpoint, 3 November 2026 IST
 
-- GitHub Actions run 41560130776 passed npm ci, all 65 tests and the full production build for commit 22cdce5.
-- Production-only exact-lockfile audit: zero known advisories.
-- Applied `allowance_private_workspaces` to the new dedicated Supabase project after confirming no public tables and no users existed.
-- Executed the transactional two-identity isolation test: each identity could read only its own row, foreign updates affected zero rows and owner reassignment was rejected. Fixtures were rolled back; auth user and workspace row counts returned to zero.
-- Supabase security advisor: no lints. Authenticated table grants are SELECT/INSERT/UPDATE/DELETE only; anonymous/public grants are absent.
-- Vercel review builds are Ready, but preview URLs are protected by Vercel Authentication. The local managed preview served HTML but interactive scripts did not load, so browser flow checks are not yet passed.
-- The installed Vercel plugin supplies skills, but no account-management tools were exposed. Vercel CLI 65.4.0 reports loggedIn=false. Authorization is needed to set SUPABASE_URL and SUPABASE_PUBLISHABLE_KEY, inspect Auth callback/email configuration and perform deployed signup/save/reload/logout checks.
-- PR #3 remains a draft; the public production application was not replaced with an unconfigured account service.
+See [SERVICE-VERIFICATION.md](SERVICE-VERIFICATION.md) for the current deployed evidence.
+
+- Latest verified GitHub Actions run 41622974774 passed tests and production build for 9095751; runtime code is unchanged from the previously tested service implementation.
+- Supabase server variables are configured in the intended Vercel project; browser verification succeeded on the protected branch preview.
+- Real owner signup/confirmation, login/logout, save/reload, persistence across login sessions, and consented Gemini interpretation passed.
+- Two-tab version conflict rejected the stale save. Export preserved the stale tab's unsaved marker in valid JSON. Test display-name changes were restored and reloaded.
+- Guest demo and private account data remain separate. Live database ownership policies and restricted grants were inspected.
+- Current security advisor reports one warning: leaked-password screening is disabled. Supabase documents this as a Pro-plan feature; no upgrade was made.
+- Public account onboarding still requires custom SMTP. The default service is restricted to project-team addresses.
+- Password recovery remains deliberately unverified at the user's request. Do not request a password change as a prerequisite for UI/UX work.
+- PR #3 remains a draft. Production still serves the earlier application; the new service is on the branch preview.
