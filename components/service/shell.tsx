@@ -3,6 +3,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { WorkspaceProvider, useWorkspace } from "./workspace-context";
+import { ThemeToggle } from "./theme";
 export const sections = [
   ["dashboard", "Dashboard"],
   ["planner", "Planner"],
@@ -24,7 +25,8 @@ function Frame({
 }) {
   const path = usePathname(),
     w = useWorkspace(),
-    [error, setError] = useState("");
+    [error, setError] = useState(""),
+    [menuOpen, setMenuOpen] = useState(false);
   async function signOut() {
     if (
       w.dirty &&
@@ -50,24 +52,48 @@ function Frame({
       <a className="skip" href="#page-content">
         Skip to page
       </a>
-      <aside className="sidebar">
+      <aside className="sidebar" data-open={menuOpen}>
         <Link href="/" className="wordmark">
-          allowance
+          allowance<span>.</span>
         </Link>
-        <p className="eyebrow">PERSONAL FINANCE WORKSPACE</p>
-        <nav aria-label="Workspace pages">
-          {sections.map(([slug, label]) => (
-            <Link
-              key={slug}
-              href={`/${demo ? "demo" : "app"}/${slug}`}
-              aria-current={
-                path === `/${demo ? "demo" : "app"}/${slug}`
-                  ? "page"
-                  : undefined
-              }
-            >
-              {label}
-            </Link>
+        <p className="eyebrow">MONEY DECISIONS, WITH CONTEXT</p>
+        <button
+          type="button"
+          className="mobile-menu-toggle"
+          aria-controls="workspace-navigation"
+          aria-expanded={menuOpen}
+          onClick={() => setMenuOpen(!menuOpen)}
+        >
+          {menuOpen ? "Close menu" : "Workspace menu"}
+        </button>
+        <nav aria-label="Workspace pages" id="workspace-navigation">
+          {sections.map(([slug, label], index) => (
+            <div className="nav-entry" key={slug}>
+              {[0, 4, 9].includes(index) && (
+                <div className="nav-group">
+                  {index === 0
+                    ? "YOUR MONEY"
+                    : index === 4
+                      ? "EXPLORE & UNDERSTAND"
+                      : "YOUR ACCOUNT"}
+                </div>
+              )}
+              <Link
+                key={slug}
+                onClick={() => setMenuOpen(false)}
+                href={`/${demo ? "demo" : "app"}/${slug}`}
+                aria-current={
+                  path === `/${demo ? "demo" : "app"}/${slug}`
+                    ? "page"
+                    : undefined
+                }
+              >
+                <span className="nav-number" aria-hidden="true">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                {label}
+              </Link>
+            </div>
           ))}
         </nav>
         <div className="sidebar-bottom">
@@ -92,6 +118,7 @@ function Frame({
       <div className="workspace-main">
         <header className="workspace-bar">
           <span>{demo ? "DEMO WORKSPACE" : "PRIVATE WORKSPACE"}</span>
+          <ThemeToggle />
           <span role="status">{w.status}</span>
           {!demo && (
             <button onClick={w.save} disabled={!w.dirty || w.busy}>

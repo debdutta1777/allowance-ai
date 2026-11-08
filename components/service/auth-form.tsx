@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
+import { ThemeToggle } from "./theme";
 export function AuthForm({
   action,
   configured,
@@ -53,58 +54,86 @@ export function AuthForm({
   }
   return (
     <main className="auth-page">
-      <Link href="/">Allowance / Home</Link>
-      <h1>{title}</h1>
-      <p>
-        Keep your plans, transactions and budgets in your personal workspace.
-      </p>
-      {!configured && (
-        <p role="status" className="notice">
-          Account access is awaiting connection to the dedicated database. The
-          fictional demo is available now; sign-up is disabled until secure
-          storage is configured.
+      <aside className="auth-story">
+        <Link className="wordmark" href="/" aria-label="Allowance home">
+          allowance<span>.</span>
+        </Link>
+        <div>
+          <p className="eyebrow">YOUR NEXT CHAPTER, IN VIEW</p>
+          <h2>
+            A clearer picture
+            <br />
+            of your money.
+            <br />
+            <em>
+              A little more room
+              <br />
+              to think.
+            </em>
+          </h2>
+          <p>
+            A personal place for your plans, spending and the decisions ahead.
+          </p>
+        </div>
+        <p>YOUR INPUTS. TRANSPARENT CALCULATIONS.</p>
+      </aside>
+      <div className="auth-content">
+        <div className="auth-theme">
+          <ThemeToggle />
+        </div>
+        <p className="eyebrow">ALLOWANCE / YOUR PERSONAL WORKSPACE</p>
+        <h1>{title}</h1>
+        <p>
+          Keep your plans, transactions and budgets in your personal workspace.
         </p>
-      )}
-      <form method="post" action={"/api/auth/" + action} onSubmit={submit}>
-        {action !== "password" && (
-          <label>
-            Email
-            <input
-              name="email"
-              type="email"
-              autoComplete="email"
-              maxLength={254}
-              required
-            />
-          </label>
+        {!configured && (
+          <p role="status" className="notice">
+            Account access is awaiting connection to the dedicated database. The
+            fictional demo is available now; sign-up is disabled until secure
+            storage is configured.
+          </p>
         )}
-        {action !== "recover" && (
-          <label>
-            Password
-            <input
-              name="password"
-              type="password"
-              autoComplete={
-                action === "sign-in" ? "current-password" : "new-password"
-              }
-              minLength={12}
-              maxLength={128}
-              required
-            />
-            <small>12 to 128 characters.</small>
-          </label>
-        )}
-        <button disabled={busy || !configured}>
-          {busy ? "Working…" : title}
-        </button>
-        <p role="status">{status}</p>
-      </form>
-      <nav aria-label="Account options">
-        <Link href="/sign-in">Sign in</Link>
-        <Link href="/sign-up">Create account</Link>
-        <Link href="/forgot-password">Forgot password</Link>
-        <Link href="/demo/dashboard">Try the fictional demo</Link>
-      </nav>
+        <form method="post" action={"/api/auth/" + action} onSubmit={submit}>
+          {action !== "password" && (
+            <label>
+              Email
+              <input
+                name="email"
+                type="email"
+                autoComplete="email"
+                maxLength={254}
+                required
+              />
+            </label>
+          )}
+          {action !== "recover" && (
+            <label>
+              Password
+              <input
+                name="password"
+                type="password"
+                autoComplete={
+                  action === "sign-in" ? "current-password" : "new-password"
+                }
+                minLength={12}
+                maxLength={128}
+                required
+              />
+              <small>12 to 128 characters.</small>
+            </label>
+          )}
+          <button disabled={busy || !configured}>
+            {busy ? "Working…" : title}
+          </button>
+          <p role="status">{status}</p>
+        </form>
+        <nav aria-label="Account options">
+          <Link href="/sign-in">Sign in</Link>
+          <Link href="/sign-up">Create account</Link>
+          <Link href="/forgot-password">Forgot password</Link>
+          <Link href="/demo/dashboard">Try the fictional demo</Link>
+        </nav>
+      </div>
     </main>
   );
 }

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./service.css";
+import { ThemeProvider } from "../components/service/theme";
 export const metadata: Metadata = {
   title: "Allowance | Personal finance workspace",
   description:
@@ -11,8 +12,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en-IN">
-      <body>{children}</body>
+    <html lang="en-IN" data-theme="light" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "try{document.documentElement.dataset.theme=localStorage.getItem('allowance-theme')==='dark'?'dark':'light'}catch{}",
+          }}
+        />
+      </head>
+      <body>
+        <ThemeProvider>{children}</ThemeProvider>
+      </body>
     </html>
   );
 }

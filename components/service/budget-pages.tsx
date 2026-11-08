@@ -3,6 +3,7 @@ import Link from "next/link";
 import { validateWorkspace } from "../../lib/workspace-model";
 import { useRef, useState } from "react";
 import { useWorkspace } from "./workspace-context";
+import { ForecastChart } from "./forecast-preview";
 import { PageTitle, Field, NumberField, money, download } from "./common";
 import { comparePurchase, type Plan } from "../../src/forecast";
 import { rupeesToPaise } from "../../src/money";
@@ -54,6 +55,17 @@ export function Dashboard() {
           <strong>{data.transactions.length}</strong>
         </div>
       </div>
+      <section className="dashboard-outlook">
+        <div className="outlook-heading">
+          <h2>Your cash-flow outlook</h2>
+          <Link href={base + "/planner"}>Adjust your plan</Link>
+        </div>
+        <ForecastChart plan={data.plan} purchase={data.purchase} />
+        <p>
+          Daily closing balances from your applied plan. Same-day expenses
+          precede income when calculating the lowest balance.
+        </p>
+      </section>
       <section className="paper-section">
         <h2>What needs your attention</h2>
         <p>
