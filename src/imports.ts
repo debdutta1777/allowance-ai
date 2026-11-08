@@ -4,8 +4,8 @@ export const CATEGORIES = ['Food', 'Transport', 'Housing', 'Education', 'Health'
 export type Category = typeof CATEGORIES[number];
 export type Transaction = { id: string; date: string; description: string; amountPaise: number; direction: 'debit' | 'credit' | 'transfer'; reference: string; category: Category };
 export type Draft = { id: string; date: string; description: string; amount: string; direction: string; reference: string; category: Category; included: boolean; duplicate: boolean; issue: string };
-export const SAMPLE_CSV = `date,description,amount,direction,reference\n2026-10-29,Campus Canteen,180.00,debit,DEMO001\n2026-10-30,Metro commute,80.00,debit,DEMO002\n2026-10-31,Textbook store,450.00,debit,DEMO003\n2026-11-01,Family allowance,5000.00,credit,DEMO004\n2026-11-01,Own savings transfer,1000.00,transfer,DEMO005\n2026-11-02,Refund from bookshop,100.00,credit,DEMO006\n2026-10-29,Campus Canteen,180.00,debit,DEMO001`;
-export const SAMPLE_MESSAGES = `2026-10-29 INR 180.00 debited to Campus Canteen ref DEMO001\n2026-10-30 INR 80.00 debited to Metro commute ref DEMO002\n2026-11-01 INR 5000.00 credited from Family allowance ref DEMO004`;
+export const SAMPLE_CSV = `date,description,amount,direction,reference\n2026-11-01,Campus Canteen,180.00,debit,DEMO001\n2026-11-01,Metro commute,80.00,debit,DEMO002\n2026-11-02,Textbook store,450.00,debit,DEMO003\n2026-11-01,Family allowance,5000.00,credit,DEMO004\n2026-11-01,Own savings transfer,1000.00,transfer,DEMO005\n2026-11-02,Refund from bookshop,100.00,credit,DEMO006\n2026-11-01,Campus Canteen,180.00,debit,DEMO001`;
+export const SAMPLE_MESSAGES = `2026-11-01 INR 180.00 debited to Campus Canteen ref DEMO001\n2026-11-01 INR 80.00 debited to Metro commute ref DEMO002\n2026-11-01 INR 5000.00 credited from Family allowance ref DEMO004`;
 export function validDate(value: string): boolean {
   const timestamp = /^\d{4}-\d{2}-\d{2}$/.test(value) ? Date.parse(`${value}T00:00:00Z`) : NaN;
   return Number.isFinite(timestamp) && new Date(timestamp).toISOString().slice(0,10) === value;

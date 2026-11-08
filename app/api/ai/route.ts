@@ -1,18 +1,37 @@
-import { handleAI } from '../../../lib/ai-service';
-import { resolveAIConfig } from '../../../lib/ai-config';
-export const dynamic='force-dynamic';
-export const runtime='nodejs';
-export const maxDuration=30;
-const windows=new Map<string,{start:number;count:number}>();
-export async function GET(request:Request){return handleAI(request,resolveAIConfig(request,process.env));}
-export async function POST(request:Request){
-  const admitRequest=()=>{
-  const identity=process.env.VERCEL==='1'?'shared-server':request.headers.get('oai-authenticated-user-id')??'shared-server';
-  const now=Date.now();const previous=windows.get(identity);const window=previous&&now-previous.start<60000?previous:{start:now,count:0};
-  if(window.count>=8)return false;
-  window.count++;windows.set(identity,window);
-  if(windows.size>1000)for(const [id,value]of windows)if(now-value.start>60000)windows.delete(id);
-  return true;
+import { sameOrigin, privateJSON } from "../../../lib/http-security";
+import { verifiedAccount } from "../../../lib/supabase/server";
+import { handleAI } from "../../../lib/ai-service";
+import { resolveAIConfig } from "../../../lib/ai-config";
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
+export const maxDuration = 30;
+export async function GET(request: Request) {
+  const account = await verifiedAccount();
+  if (!account)
+    return privateJSON({
+      available: false,
+      provider: "Gemini",
+      sessionKeyAllowed: false,
+    });
+  return handleAI(request, resolveAIConfig(request, process.env));
+}
+export async function POST(request: Request) {
+  if (!sameOrigin(request))
+    return privateJSON({ error: "Use this application on its own site." }, 403);
+  const account = await verifiedAccount();
+  if (!account)
+    return privateJSON(
+      { error: "Sign in to request a Gemini interpretation." },
+      401,
+    );
+  const admitRequest = async () => {
+    const { data, error } = await account.client.rpc("allowance_admit_ai");
+    if (error || typeof data !== "boolean")
+      throw new Error("AI admission unavailable");
+    return data;
   };
-  return handleAI(request,{...resolveAIConfig(request,process.env),admitRequest});
+  return handleAI(request, {
+    ...resolveAIConfig(request, process.env),
+    admitRequest,
+  });
 }
