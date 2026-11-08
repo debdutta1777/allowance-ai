@@ -1,46 +1,41 @@
 import Link from "next/link";
 import { ForecastPreview } from "../components/service/forecast-preview";
 import { ThemeToggle } from "../components/service/theme";
+import { LandingMotion } from "../components/service/landing-motion";
 
 const tools = [
   [
     "planner",
-    "Smart budgeting",
     "Make room for what matters.",
     "Bring in reviewed transactions, set monthly limits and see how a purchase changes the days ahead.",
     "Plan your budget",
   ],
   [
     "investing",
-    "Investing & portfolio",
     "Understand the longer view.",
     "Explore SIP and lump-sum scenarios, understand investment basics and review your entered portfolio allocation.",
     "Explore investing",
   ],
   [
     "markets",
-    "Trading & markets",
     "Test an idea against the past.",
     "Backtest a moving-average strategy on uploaded historical prices, with fees and a paper trade ledger.",
     "Try a backtest",
   ],
   [
     "tax",
-    "Tax helper",
     "Put the tax rules in perspective.",
     "Compare supported salary scenarios under the old and new regimes, with the assumptions beside the results.",
     "Compare regimes",
   ],
   [
     "safety",
-    "Scam & fraud checks",
     "Pause before you approve.",
     "Review suspicious payment messages for common warning signs. The check runs locally and never opens their links.",
     "Review a message",
   ],
   [
     "business",
-    "Small business finance",
     "See the numbers behind the next step.",
     "Work through cash-flow scenarios, loan payments and entered GST arithmetic before committing to a decision.",
     "Explore the calculators",
@@ -48,7 +43,7 @@ const tools = [
 ];
 export default function Home() {
   return (
-    <main className="landing">
+    <LandingMotion>
       <a className="skip" href="#main-content">
         Skip to content
       </a>
@@ -111,6 +106,7 @@ export default function Home() {
       <section
         className="intro-section content-width"
         aria-labelledby="intro-title"
+        data-reveal
       >
         <p className="eyebrow">LESS GUESSWORK. MORE CONTEXT.</p>
         <div>
@@ -135,30 +131,18 @@ export default function Home() {
         id="tools"
         aria-labelledby="tools-title"
       >
-        <div className="section-heading">
+        <div className="section-heading" data-reveal>
           <div>
-            <p className="eyebrow">ONE WORKSPACE. SIX PERSPECTIVES.</p>
-            <h2 id="tools-title">
-              A little clarity,
-              <br />
-              wherever you need it.
-            </h2>
+            <p className="eyebrow">WHAT YOU CAN DO</p>
+            <h2 id="tools-title">A little clarity, wherever you need it.</h2>
           </div>
-          <p>
-            Working tools for real questions.
-            <br />
-            Explore each one with fictional data.
-          </p>
+          <p>Explore the working tools with fictional data.</p>
         </div>
         <div className="tool-directory">
-          {tools.map(([slug, label, title, copy, action], index) => (
-            <article className="tool-row" key={slug}>
-              <div className="tool-label">
-                <span className="tool-number">0{index + 1}</span>
-                <h3>{label}</h3>
-              </div>
+          {tools.map(([slug, title, copy, action]) => (
+            <article className="tool-row" key={slug} data-reveal>
               <div>
-                <h4>{title}</h4>
+                <h3>{title}</h3>
                 <p>{copy}</p>
               </div>
               <Link href={"/demo/" + slug}>{action}</Link>
@@ -168,7 +152,7 @@ export default function Home() {
       </section>
       <section className="workflow-section">
         <div className="content-width workflow-layout">
-          <div>
+          <div data-reveal>
             <p className="eyebrow">FROM INPUT TO INSIGHT</p>
             <h2>
               A simple way
@@ -180,7 +164,7 @@ export default function Home() {
             </Link>
           </div>
           <ol className="workflow-list">
-            <li>
+            <li data-reveal>
               <span>01</span>
               <div>
                 <h3>Bring your numbers.</h3>
@@ -190,7 +174,7 @@ export default function Home() {
                 </p>
               </div>
             </li>
-            <li>
+            <li data-reveal>
               <span>02</span>
               <div>
                 <h3>See what changes.</h3>
@@ -200,7 +184,7 @@ export default function Home() {
                 </p>
               </div>
             </li>
-            <li>
+            <li data-reveal>
               <span>03</span>
               <div>
                 <h3>Keep the useful picture.</h3>
@@ -214,7 +198,7 @@ export default function Home() {
           </ol>
         </div>
       </section>
-      <section className="data-section content-width">
+      <section className="data-section content-width" data-reveal>
         <p className="eyebrow">YOUR RECORDS, YOUR WORKSPACE</p>
         <h2>
           Personal by design.
@@ -239,7 +223,7 @@ export default function Home() {
       </section>
       <footer className="landing-footer">
         <div className="content-width">
-          <div className="footer-invitation">
+          <div className="footer-invitation" data-reveal>
             <h2>
               Make room for
               <br />
@@ -261,6 +245,6 @@ export default function Home() {
           </div>
         </div>
       </footer>
-    </main>
+    </LandingMotion>
   );
 }

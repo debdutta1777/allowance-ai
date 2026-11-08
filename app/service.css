@@ -1826,3 +1826,145 @@ summary {
     font-size: 11px;
   }
 }
+
+/* Compact tool stories: a heading, a short explanation and one clear action. */
+.landing-tools {
+  padding-bottom: 58px;
+}
+.landing-tools .section-heading {
+  align-items: center;
+  gap: 24px;
+  padding-bottom: 22px;
+}
+.landing-tools .section-heading .eyebrow {
+  margin-bottom: 13px;
+}
+.landing-tools .section-heading h2 {
+  font-size: clamp(28px, 2.7vw, 37px);
+  letter-spacing: -1.3px;
+}
+.landing-tools .section-heading > p {
+  max-width: 25ch;
+  margin: 0;
+}
+.landing .tool-directory {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 52px;
+}
+.landing .tool-row {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+  padding: 23px 0 22px;
+}
+.landing .tool-row h3 {
+  font-size: 22px;
+  line-height: 1.2;
+  letter-spacing: -0.7px;
+  margin-bottom: 10px;
+}
+.landing .tool-row p {
+  max-width: 55ch;
+  line-height: 1.65;
+}
+.landing .tool-row > a {
+  margin-top: 13px;
+  min-width: 0;
+  font-size: 11px;
+  padding: 3px 0;
+  min-height: 28px;
+}
+.landing .tool-row:nth-child(even) {
+  --reveal-delay: 70ms;
+}
+@keyframes landing-enter {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 18px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes forecast-draw {
+  from {
+    stroke-dashoffset: 1000;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+  .landing [data-reveal-state="pending"] {
+    opacity: 0;
+    transform: translate3d(0, 20px, 0);
+  }
+  .landing [data-reveal-state="visible"] {
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity 650ms cubic-bezier(0.2, 0.65, 0.3, 1),
+      transform 650ms cubic-bezier(0.2, 0.65, 0.3, 1);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+  .landing [data-reveal]:focus-within {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .landing .hero-copy {
+    animation: landing-enter 750ms cubic-bezier(0.2, 0.65, 0.3, 1) both;
+  }
+  .landing .hero .product-preview {
+    animation: landing-enter 850ms 100ms cubic-bezier(0.2, 0.65, 0.3, 1) both;
+  }
+  .landing .hero .chart-baseline {
+    stroke-dasharray: 1000;
+    animation: forecast-draw 1600ms 250ms cubic-bezier(0.2, 0.65, 0.3, 1) both;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .landing [data-reveal] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+    animation: none;
+  }
+}
+@media (max-width: 800px) {
+  .landing .tool-directory {
+    gap: 0 30px;
+  }
+  .landing-tools .section-heading {
+    align-items: flex-start;
+  }
+  .landing-tools .section-heading > p {
+    max-width: none;
+  }
+}
+@media (max-width: 600px) {
+  .landing .tool-directory {
+    grid-template-columns: 1fr;
+  }
+  .landing .tool-row {
+    padding-block: 20px;
+    --reveal-delay: 0ms;
+  }
+  .landing-tools {
+    padding-bottom: 38px;
+  }
+}
+@media (max-width: 600px) {
+  .landing .tool-row:nth-child(even) {
+    --reveal-delay: 0ms;
+  }
+}
