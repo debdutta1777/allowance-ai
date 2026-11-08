@@ -88,7 +88,7 @@ export default function Home() {
                 Start your workspace
               </Link>
               <Link className="text-link" href="/demo/dashboard">
-                Take a look inside <span aria-hidden="true">↗</span>
+                Take a look inside
               </Link>
             </div>
             <p className="hero-note">
@@ -161,10 +161,7 @@ export default function Home() {
                 <h4>{title}</h4>
                 <p>{copy}</p>
               </div>
-              <Link href={"/demo/" + slug}>
-                {action}
-                <span aria-hidden="true">↗</span>
-              </Link>
+              <Link href={"/demo/" + slug}>{action}</Link>
             </article>
           ))}
         </div>
@@ -237,7 +234,7 @@ export default function Home() {
           </p>
         </div>
         <Link className="text-link" href="/demo/settings">
-          Understand how your data is handled <span aria-hidden="true">↗</span>
+          Understand how your data is handled
         </Link>
       </section>
       <footer className="landing-footer">

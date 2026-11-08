@@ -134,7 +134,7 @@ export function ForecastPreview() {
         </p>
       </div>
       <Link className="preview-open" href="/demo/planner">
-        Open the full planner <span aria-hidden="true">↗</span>
+        Open the full planner
       </Link>
     </section>
   );
