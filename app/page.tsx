@@ -3,42 +3,43 @@ import { ForecastPreview } from "../components/service/forecast-preview";
 import { ThemeToggle } from "../components/service/theme";
 import { LandingMotion } from "../components/service/landing-motion";
 import { FeatureReel } from "../components/service/feature-reel";
+import { ScrollWords } from "../components/service/scroll-words";
 
 const tools = [
   [
     "planner",
-    "Make room for what matters.",
-    "Bring in reviewed transactions, set monthly limits and see how a purchase changes the days ahead.",
+    "Budget the month. Test a purchase.",
+    "Import and review your spending. Set category limits, add upcoming bills and see whether a purchase leaves enough for essentials.",
     "Plan your budget",
   ],
   [
     "investing",
-    "Understand the longer view.",
-    "Explore SIP and lump-sum scenarios, understand investment basics and review your entered portfolio allocation.",
+    "Model SIPs. Review your portfolio.",
+    "Enter a contribution, time horizon and assumed return. Compare SIP and lump-sum projections, then check your portfolio allocation.",
     "Explore investing",
   ],
   [
     "markets",
-    "Test an idea against the past.",
-    "Backtest a moving-average strategy on uploaded historical prices, with fees and a paper trade ledger.",
+    "Backtest a strategy on past prices.",
+    "Upload historical closing prices. Review simulated trades, fees, drawdown and buy-and-hold results. No real orders are placed.",
     "Try a backtest",
   ],
   [
     "tax",
-    "Put the tax rules in perspective.",
-    "Compare supported salary scenarios under the old and new regimes, with the assumptions beside the results.",
+    "Compare old and new tax regimes.",
+    "Estimate both regimes for a supported salary-only scenario in FY 2025–26. See the deductions, rebates and limits behind the result.",
     "Compare regimes",
   ],
   [
     "safety",
-    "Pause before you approve.",
-    "Review suspicious payment messages for common warning signs. The check runs locally and never opens their links.",
+    "Spot warning signs before you pay.",
+    "Paste a suspicious payment message to check for PIN requests, collect-request tricks and pressure tactics. The check runs on your device.",
     "Review a message",
   ],
   [
     "business",
-    "See the numbers behind the next step.",
-    "Work through cash-flow scenarios, loan payments and entered GST arithmetic before committing to a decision.",
+    "Forecast cash flow. Calculate EMIs.",
+    "Estimate monthly cash movement, fixed-rate loan repayments and tax on an entered subtotal. Review the arithmetic before exporting an estimate.",
     "Explore the calculators",
   ],
 ];
@@ -67,17 +68,18 @@ export default function Home() {
         </header>
         <section className="hero content-width" id="main-content">
           <div className="hero-copy">
-            <p className="eyebrow">PERSONAL FINANCE, CONSIDERED</p>
+            <p className="eyebrow">BUDGETS. SCENARIOS. MONEY DECISIONS.</p>
             <h1>
-              A clearer picture.
-              <br />A better money
+              Plan this month.
               <br />
-              <em>decision.</em>
+              Know what’s
+              <br />
+              <em>left to spend.</em>
             </h1>
             <p className="hero-description">
-              From this month’s essentials to the plans ahead. Understand your
-              spending, explore the possibilities and make your next move with
-              context.
+              Bring your spending, bills and expected income into one plan. Test
+              a purchase before making it, then save the numbers under your
+              account.
             </p>
             <div className="actions">
               <Link className="button-link" href="/sign-up">
@@ -88,16 +90,16 @@ export default function Home() {
               </Link>
             </div>
             <p className="hero-note">
-              Your own inputs. Transparent calculations. AI when you choose.
+              Calculated from your inputs. Gemini explanations are optional.
             </p>
           </div>
           <ForecastPreview />
         </section>
         <div className="hero-foundation content-width">
           <p>
-            Thoughtful tools for
+            One place for
             <br />
-            <strong>everyday money questions.</strong>
+            <strong>your everyday financial planning.</strong>
           </p>
           <span>Budget & spending</span>
           <span>Future planning</span>
@@ -107,23 +109,19 @@ export default function Home() {
       <section
         className="intro-section content-width"
         aria-labelledby="intro-title"
-        data-reveal
       >
-        <p className="eyebrow">LESS GUESSWORK. MORE CONTEXT.</p>
+        <p className="eyebrow">PLAN BEYOND THE CURRENT BALANCE</p>
         <div>
           <h2 id="intro-title">
-            Your finances deserve
-            <br />
-            more than a best guess.
+            <ScrollWords text="Know what remains after the bills. Then decide what comes next." />
           </h2>
           <p>
-            There’s a difference between knowing your balance and knowing what
-            you can do with it. Allowance brings your plans, spending and
-            financial questions into one personal workspace.
+            A balance is a starting point. Rent, daily essentials and the next
+            income date determine how much room your plan actually has.
           </p>
           <p>
-            Start with a budget. Test a purchase. Look further ahead. Each tool
-            explains its inputs and limits so you can understand the result.
+            Add those commitments to the planner. Compare a purchase, delay an
+            expected payment and inspect the daily balances behind the answer.
           </p>
         </div>
       </section>
@@ -135,7 +133,9 @@ export default function Home() {
         <div className="section-heading">
           <div>
             <p className="eyebrow">WHAT YOU CAN DO</p>
-            <h2 id="tools-title">A little clarity, wherever you need it.</h2>
+            <h2 id="tools-title">
+              <ScrollWords text="Six tools. A specific answer to each question." />
+            </h2>
           </div>
           <p>Explore the working tools with fictional data.</p>
         </div>
@@ -153,9 +153,7 @@ export default function Home() {
           <div data-reveal>
             <p className="eyebrow">FROM INPUT TO INSIGHT</p>
             <h2>
-              A simple way
-              <br />
-              to get your bearings.
+              <ScrollWords text="Import. Review. Plan the next move." />
             </h2>
             <Link className="button-link" href="/demo/transactions">
               Try a sample import
@@ -165,7 +163,7 @@ export default function Home() {
             <li data-reveal>
               <span>01</span>
               <div>
-                <h3>Bring your numbers.</h3>
+                <h3>Review your spending record.</h3>
                 <p>
                   Enter a plan or import supported CSV and dated bank messages.
                   Review every transaction before including it.
@@ -175,7 +173,7 @@ export default function Home() {
             <li data-reveal>
               <span>02</span>
               <div>
-                <h3>See what changes.</h3>
+                <h3>Calculate a scenario.</h3>
                 <p>
                   Compare a purchase, set a monthly limit or explore a scenario.
                   Calculations show the assumptions behind the outcome.
@@ -185,7 +183,7 @@ export default function Home() {
             <li data-reveal>
               <span>03</span>
               <div>
-                <h3>Keep the useful picture.</h3>
+                <h3>Save it to your account.</h3>
                 <p>
                   Save plans, reviewed transactions, budgets and holdings to
                   your account. Request an optional Gemini explanation with your
@@ -196,12 +194,10 @@ export default function Home() {
           </ol>
         </div>
       </section>
-      <section className="data-section content-width" data-reveal>
+      <section className="data-section content-width">
         <p className="eyebrow">YOUR RECORDS, YOUR WORKSPACE</p>
         <h2>
-          Personal by design.
-          <br />
-          <span>Clear about the boundaries.</span>
+          <ScrollWords text="Your records stay with your account. AI only sees the plan you approve." />
         </h2>
         <div className="data-details">
           <p>
@@ -221,11 +217,9 @@ export default function Home() {
       </section>
       <footer className="landing-footer">
         <div className="content-width">
-          <div className="footer-invitation" data-reveal>
+          <div className="footer-invitation">
             <h2>
-              Make room for
-              <br />
-              <em>a clearer next step.</em>
+              <ScrollWords text="Build your first budget. Test your next purchase." />
             </h2>
             <Link className="button-link" href="/sign-up">
               Create your workspace
@@ -235,7 +229,7 @@ export default function Home() {
             <Link className="wordmark" href="/">
               allowance<span>.</span>
             </Link>
-            <p>Money decisions, with more context.</p>
+            <p>Budgeting and financial scenarios, in one workspace.</p>
             <nav aria-label="Footer navigation">
               <Link href="/demo/dashboard">Explore demo</Link>
               <Link href="/sign-in">Sign in</Link>

@@ -5,11 +5,14 @@ import { ThemeToggle } from "./theme";
 export function AuthForm({
   action,
   configured,
+  notice = "",
 }: {
   action: "sign-in" | "sign-up" | "recover" | "password";
   configured: boolean;
+  notice?: string;
 }) {
   const [status, setStatus] = useState(""),
+    [failed, setFailed] = useState(false),
     [busy, setBusy] = useState(false);
   const title = {
     "sign-in": "Sign in",
@@ -21,6 +24,7 @@ export function AuthForm({
     event.preventDefault();
     setBusy(true);
     setStatus("");
+    setFailed(false);
     const fields = new FormData(event.currentTarget);
     try {
       const body =
@@ -43,6 +47,7 @@ export function AuthForm({
       setStatus(result.message);
       if (result.signedIn) window.location.assign("/app/dashboard");
     } catch (error) {
+      setFailed(true);
       setStatus(
         error instanceof Error
           ? error.message
@@ -83,6 +88,11 @@ export function AuthForm({
         </div>
         <p className="eyebrow">ALLOWANCE / YOUR PERSONAL WORKSPACE</p>
         <h1>{title}</h1>
+        {notice && (
+          <p role="status" className="auth-error">
+            {notice}
+          </p>
+        )}
         <p>
           Keep your plans, transactions and budgets in your personal workspace.
         </p>
@@ -125,8 +135,21 @@ export function AuthForm({
           <button disabled={busy || !configured}>
             {busy ? "Working…" : title}
           </button>
-          <p role="status">{status}</p>
+          <p
+            role={failed ? "alert" : "status"}
+            className={failed ? "auth-error" : undefined}
+          >
+            {status}
+          </p>
         </form>
+        {(action === "sign-in" || action === "sign-up") && (
+          <ConfirmationHelp configured={configured} />
+        )}
+        {action === "password" && status && !failed && (
+          <Link className="button-link" href="/app/dashboard">
+            Return to your workspace
+          </Link>
+        )}
         <nav aria-label="Account options">
           <Link href="/sign-in">Sign in</Link>
           <Link href="/sign-up">Create account</Link>
@@ -135,5 +158,60 @@ export function AuthForm({
         </nav>
       </div>
     </main>
+  );
+}
+
+function ConfirmationHelp({ configured }: { configured: boolean }) {
+  const [busy, setBusy] = useState(false);
+  const [message, setMessage] = useState("");
+  return (
+    <details className="confirmation-help">
+      <summary>Need a new confirmation email?</summary>
+      <form
+        onSubmit={async (event) => {
+          event.preventDefault();
+          if (busy) return;
+          const email = new FormData(event.currentTarget).get("email");
+          setBusy(true);
+          setMessage("");
+          try {
+            const response = await fetch("/api/auth/resend", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ email }),
+            });
+            const result = (await response.json()) as {
+              message?: string;
+              error?: string;
+            };
+            setMessage(
+              response.ok
+                ? (result.message ?? "Check your inbox.")
+                : (result.error ??
+                    "The email could not be requested. Try again later."),
+            );
+          } catch {
+            setMessage("Unable to connect. Check your connection and retry.");
+          } finally {
+            setBusy(false);
+          }
+        }}
+      >
+        <label>
+          Email
+          <input
+            type="email"
+            name="email"
+            autoComplete="email"
+            maxLength={254}
+            required
+          />
+        </label>
+        <button disabled={busy || !configured}>
+          {busy ? "Requesting…" : "Request confirmation email"}
+        </button>
+        <p role="status">{message}</p>
+      </form>
+    </details>
   );
 }

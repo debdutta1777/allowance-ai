@@ -41,6 +41,31 @@ export async function POST(
   try {
     const client = await serverSupabase();
     const body = await boundedJSON(request, 4096);
+    if (action === "resend") {
+      const { email } = z
+        .object({ email: z.email().max(254) })
+        .strict()
+        .parse(body);
+      const { error } = await client.auth.resend({
+        type: "signup",
+        email,
+        options: {
+          emailRedirectTo: new URL("/auth/confirm", request.url).href,
+        },
+      });
+      if (error)
+        return privateJSON(
+          {
+            error:
+              "The confirmation email could not be requested. Please wait and try again, or sign in if you already confirmed your email.",
+          },
+          400,
+        );
+      return privateJSON({
+        message:
+          "If this address has an account awaiting confirmation, a new email has been requested. Check your inbox and spam folder.",
+      });
+    }
     if (action === "sign-in" || action === "sign-up") {
       const input = z
         .object({

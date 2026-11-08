@@ -1,4 +1,6 @@
-# Allowance architecture
+# Original prototype architecture
+
+This document describes the earlier single-page prototype. The current account-based Next.js service, database ownership and shared AI limits are documented in [SERVICE-SETUP.md](SERVICE-SETUP.md).
 
 ## Client
 

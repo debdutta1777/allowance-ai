@@ -14,7 +14,7 @@ Do not use or modify AuditEase, AuditEaseD or Eventora. The new Supabase connect
 
 1. Connect the intended Supabase account in ChatGPT Apps. Choose the dedicated Allowance organization/project. Check and agree any project cost before creating it.
 2. Apply `supabase/schema.sql` only to that project. It creates one workspace per `auth.users.id`, enables RLS, revokes anonymous/public access and limits authenticated roles to ordinary data operations. It does not grant TRUNCATE. Each SELECT/UPDATE/DELETE policy checks ownership; INSERT/UPDATE also check the resulting owner.
-3. Run `supabase/verify-isolation.sql` to test two simulated authenticated identities. It rolls back its synthetic fixtures. Run Supabase security advisors and resolve any relevant findings.
+3. Apply `supabase/ai-quota.sql` to install shared Gemini admission limits. Then run `supabase/verify-ai-quota.sql` and `supabase/verify-isolation.sql` to test two simulated authenticated identities. It rolls back its synthetic fixtures. Run Supabase security advisors and resolve any relevant findings.
 4. Set these **server-only** Vercel variables in the project's required environments:
    - `SUPABASE_URL`
    - `SUPABASE_PUBLISHABLE_KEY` (modern publishable key; no service-role key)
@@ -29,7 +29,7 @@ Every request creates its own Supabase client. Session cookies are HttpOnly, Sec
 
 Saved: applied plan, purchase scenario, income delay, reviewed transaction rows, monthly limits, holdings and display preference. Account saves are explicit. Raw import text, historical-price CSV, tax/scam/business inputs and temporary tool results are not saved. Personal workspace data is not copied to localStorage. Database owners and infrastructure operators may have operational access; no end-to-end encryption claim is made.
 
-Gemini is restricted to verified signed-in users, receives approved plan inputs with best-effort identifier masking and returns only validated interpretations of server-calculated facts. The eight-per-minute allowance is per authenticated user per server instance, not a global quota guarantee. Hosting/provider limits remain appropriate for broad public exposure.
+Gemini is restricted to verified signed-in users, receives approved plan inputs with best-effort identifier masking and returns only validated interpretations of server-calculated facts. Database admission limits are shared across server instances: eight requests per minute and forty per UTC day per user, plus thirty per minute and two hundred per UTC day across the application. Missing quota infrastructure fails closed before Gemini is called. These are request limits, not a monetary spending guarantee; provider billing controls remain appropriate.
 
 ## Six feature areas and boundaries
 
@@ -40,7 +40,7 @@ Gemini is restricted to verified signed-in users, receives approved plan inputs 
 5. Scam/fraud checks: local rule-based warning signs for payment/PIN/OTP/QR/urgency/remote-access/links. No sender verification or guarantee of safety. Reference: NPCI fraud-awareness guidance.
 6. Small business: fixed-rate reducing-balance EMI, constant monthly cash-flow scenarios and user-entered GST arithmetic with an exportable estimate. No GST classification, compliant tax invoice, e-invoicing or return filing.
 
-The work in this phase concerns application structure, functional tools and account integration. A separate visual design pass remains planned.
+The service includes a light-first green visual design, optional dark mode, a scroll-driven feature reel and word-by-word section headings. Reduced-motion preferences receive readable static content.
 
 ## Verification checkpoint, 3 November 2026 IST
 

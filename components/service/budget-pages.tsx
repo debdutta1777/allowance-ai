@@ -31,6 +31,11 @@ export function Dashboard() {
       month,
       data.budgets[month] ?? {},
     );
+  const needsPlan =
+    !demo &&
+    data.plan.openingBalancePaise === 0 &&
+    data.plan.dailyEssentialsPaise === 0 &&
+    data.plan.entries.length === 0;
   return (
     <>
       <PageTitle
@@ -39,47 +44,68 @@ export function Dashboard() {
             ? `Your overview, ${data.preferences.displayName}`
             : "Your money, in view"
         }
-        description="A common starting point for your budget, plans and financial questions."
+        description="Review your applied forecast, imported spending and the next step in your budget."
       />
-      <div className="stat-strip">
-        <div>
-          <span>Lowest forecast balance</span>
-          <strong>{money(forecast.baseline.minimumBalancePaise)}</strong>
-        </div>
-        <div>
-          <span>Imported spending · {month}</span>
-          <strong>{money(summary.spendingPaise)}</strong>
-        </div>
-        <div>
-          <span>Saved transactions</span>
-          <strong>{data.transactions.length}</strong>
-        </div>
-      </div>
-      <section className="dashboard-outlook">
-        <div className="outlook-heading">
-          <h2>Your cash-flow outlook</h2>
-          <Link href={base + "/planner"}>Adjust your plan</Link>
-        </div>
-        <ForecastChart plan={data.plan} purchase={data.purchase} />
-        <p>
-          Daily closing balances from your applied plan. Same-day expenses
-          precede income when calculating the lowest balance.
-        </p>
-      </section>
-      <section className="paper-section">
-        <h2>What needs your attention</h2>
-        <p>
-          {forecast.proposed.firstShortfallDate
-            ? `Your applied purchase scenario first falls below zero on ${forecast.proposed.firstShortfallDate}.`
-            : "The applied forecast has no purchase-scenario shortfall within its date range."}
-        </p>
-        <p>
-          {summary.unbudgetedSpendingPaise
-            ? `${money(summary.unbudgetedSpendingPaise)} of imported monthly spending has no category limit.`
-            : "Set monthly limits after importing transactions to give the spending totals context."}
-        </p>
-        <Link href={base + "/planner"}>Review your cash-flow plan</Link>
-      </section>
+      {needsPlan && (
+        <section className="empty-workspace">
+          <p className="eyebrow">SET UP YOUR FIRST PLAN</p>
+          <h2>Start with the money you have.</h2>
+          <p>
+            Enter your available balance, daily essentials and upcoming bills.
+            Apply the plan, then select Save workspace to keep it under your
+            account.
+          </p>
+          <div className="actions">
+            <Link className="button-link" href="/app/planner">
+              Create your first plan
+            </Link>
+            <Link href="/app/transactions">Import spending records</Link>
+          </div>
+        </section>
+      )}
+      {!needsPlan && (
+        <>
+          <div className="stat-strip">
+            <div>
+              <span>Lowest forecast balance</span>
+              <strong>{money(forecast.baseline.minimumBalancePaise)}</strong>
+            </div>
+            <div>
+              <span>Imported spending · {month}</span>
+              <strong>{money(summary.spendingPaise)}</strong>
+            </div>
+            <div>
+              <span>Saved transactions</span>
+              <strong>{data.transactions.length}</strong>
+            </div>
+          </div>
+          <section className="dashboard-outlook">
+            <div className="outlook-heading">
+              <h2>Your cash-flow outlook</h2>
+              <Link href={base + "/planner"}>Adjust your plan</Link>
+            </div>
+            <ForecastChart plan={data.plan} purchase={data.purchase} />
+            <p>
+              Daily closing balances from your applied plan. Same-day expenses
+              precede income when calculating the lowest balance.
+            </p>
+          </section>
+          <section className="paper-section">
+            <h2>What needs your attention</h2>
+            <p>
+              {forecast.proposed.firstShortfallDate
+                ? `Your applied purchase scenario first falls below zero on ${forecast.proposed.firstShortfallDate}.`
+                : "The applied forecast has no purchase-scenario shortfall within its date range."}
+            </p>
+            <p>
+              {summary.unbudgetedSpendingPaise
+                ? `${money(summary.unbudgetedSpendingPaise)} of imported monthly spending has no category limit.`
+                : "Set monthly limits after importing transactions to give the spending totals context."}
+            </p>
+            <Link href={base + "/planner"}>Review your cash-flow plan</Link>
+          </section>
+        </>
+      )}
       <h2>Six ways to work with Allowance</h2>
       <div className="directory-list">
         {[

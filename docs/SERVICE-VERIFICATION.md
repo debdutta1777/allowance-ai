@@ -55,6 +55,16 @@ Verified on the stable feature-branch preview alias on 3 November 2026:
 - Password recovery and password change remain unverified at the user's explicit request. Do not block UI/UX work on a forced password change.
 - Custom SMTP is disabled. Supabase's default email delivery only permits project-team addresses, so general public email signup is not ready. Documentation: https://supabase.com/docs/guides/auth/auth-smtp
 - Leaked-password protection is not enabled on the Free project. Documentation: https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection
-- The per-user Gemini rate allowance is per server instance; it is not a durable aggregate spending cap. No paid quota service was introduced.
+- Shared Gemini request limits were installed on 8 November 2026. Per-user/global minute/day limits, resets and role permissions passed transactional SQL checks; synthetic fixtures rolled back. Request limits do not guarantee a monetary spending cap.
 - The new service remains in draft PR #3 and the branch preview. Existing production has not been replaced. UI/UX work can proceed while public email delivery is configured.
 - Fictional QA plan, one transaction and monthly limit remain in the owner's preview workspace for inspection. No real financial data was used.
+
+## Readiness and motion update, 8 November 2026
+
+- 66 automated tests, TypeScript checking and the Next.js production build passed locally. Full-repository ESLint remains failing on existing explicit-any, hook and internal-link findings; it is not a passing release check.
+- A fresh SMTP configuration read reached Supabase sign-in, so the previous disabled-SMTP finding could not be rechecked in the current browser session.
+- Section headings progressively reveal words on scroll. Benefit descriptions now identify actual inputs and outputs rather than general promises. The green palette, light default and dark option remain.
+- Empty personal workspaces show setup guidance instead of a misleading zero-balance success state.
+- Expired confirmation links have a specific explanation; signup confirmation emails can be requested again with a generic account-safe response. Live resend email delivery has not been exercised.
+- Database advisor reports an informational no-policy notice for the private quota table: intentional deny-all direct access, restricted function access only. Leaked-password screening remains disabled on the Free plan.
+- Public signup SMTP and production promotion remain launch steps. Password recovery remains deliberately unverified.
