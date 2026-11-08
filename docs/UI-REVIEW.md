@@ -19,3 +19,12 @@ The reference is Oripio Web's Fintech Landing Page Design on Dribbble (shot 2753
 - Account and financial API handlers, database schema, ownership checks and existing environment variables were not changed. Password recovery remains deliberately unverified. Public signup email delivery still requires custom SMTP.
 
 The change is on the existing feature/personal-finance-service review branch. It does not replace the production application until the service release is promoted.
+
+## Pinned feature reel
+
+The user supplied Pinterest pin 206743439140044475 as the replacement motion reference. Its public nine-second video shows a pinned panel, vertically travelling feature headings, fading neighbouring headings, an accompanying description and a rotating graphic. The implementation recreates that interaction with the existing ivory/sage/forest-green palette and native SVG artwork; no reference imagery or video is included in the product.
+
+- The six existing tool headlines move through a fixed visual window as ordinary page scrolling advances. The current description and working tool link stay synchronized. A short initial pause keeps the first headline stable when entering from the navigation anchor.
+- Previous/Next controls provide an alternative to scrolling. Scroll listeners are passive and updates are batched through requestAnimationFrame. There is no wheel interception, autoplay, carousel timer or scroll lock.
+- Reduced-motion preferences, viewports below 640 CSS pixels in height, missing IntersectionObserver and disabled JavaScript use the compact static six-tool layout. The small-screen enhanced layout hides the decorative emblem and stacks the description below the reel.
+- Browser checks confirmed the first feature at position zero, Next selecting investing at position one, ordinary scrolling selecting later features, and the last feature at position five before scrolling out into the following section. Local production build and TypeScript checks passed.

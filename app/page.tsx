@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ForecastPreview } from "../components/service/forecast-preview";
 import { ThemeToggle } from "../components/service/theme";
 import { LandingMotion } from "../components/service/landing-motion";
+import { FeatureReel } from "../components/service/feature-reel";
 
 const tools = [
   [
@@ -131,24 +132,21 @@ export default function Home() {
         id="tools"
         aria-labelledby="tools-title"
       >
-        <div className="section-heading" data-reveal>
+        <div className="section-heading">
           <div>
             <p className="eyebrow">WHAT YOU CAN DO</p>
             <h2 id="tools-title">A little clarity, wherever you need it.</h2>
           </div>
           <p>Explore the working tools with fictional data.</p>
         </div>
-        <div className="tool-directory">
-          {tools.map(([slug, title, copy, action]) => (
-            <article className="tool-row" key={slug} data-reveal>
-              <div>
-                <h3>{title}</h3>
-                <p>{copy}</p>
-              </div>
-              <Link href={"/demo/" + slug}>{action}</Link>
-            </article>
-          ))}
-        </div>
+        <FeatureReel
+          tools={tools.map(([slug, title, copy, action]) => ({
+            slug,
+            title,
+            copy,
+            action,
+          }))}
+        />
       </section>
       <section className="workflow-section">
         <div className="content-width workflow-layout">
