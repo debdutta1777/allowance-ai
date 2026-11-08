@@ -1,8 +1,9 @@
 "use client";
 import Link from "next/link";
 import { validateWorkspace } from "../../lib/workspace-model";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useWorkspace } from "./workspace-context";
+import { PurchaseDecision } from "./purchase-decision";
 import { ForecastChart } from "./forecast-preview";
 import { PageTitle, Field, NumberField, money, download } from "./common";
 import { comparePurchase, type Plan } from "../../src/forecast";
@@ -46,6 +47,39 @@ export function Dashboard() {
         }
         description="Review your applied forecast, imported spending and the next step in your budget."
       />
+      {demo && (
+        <section className="judge-demo">
+          <p className="eyebrow">TRY THE COMPLETE SCENARIO</p>
+          <h2>Can a ₹2,000 purchase wait until the next income?</h2>
+          <p>
+            This fictional plan starts with ₹6,400, includes rent and travel,
+            and expects ₹5,000 on 13 November. No account or financial data is
+            needed.
+          </p>
+          <ol>
+            <li>Open the planner and inspect the shortfall.</li>
+            <li>
+              Move the purchase along the timeline, or use its earliest feasible
+              date.
+            </li>
+            <li>
+              Try a sample transaction import and review the proposed
+              categories.
+            </li>
+          </ol>
+          <div className="actions">
+            <Link className="button-link" href="/demo/planner">
+              Start the purchase scenario
+            </Link>
+            <Link href="/demo/transactions">Review a sample import</Link>
+          </div>
+          <p className="field-note">
+            All six tools work in this temporary demo. Live Gemini explanations
+            and private saves require a personal account. Reloading resets demo
+            edits.
+          </p>
+        </section>
+      )}
       {needsPlan && (
         <section className="empty-workspace">
           <p className="eyebrow">SET UP YOUR FIRST PLAN</p>
@@ -151,6 +185,13 @@ export function Dashboard() {
   );
 }
 
+type AIExplanation = {
+  overview: string;
+  suggestion: string;
+  evidence: ReturnType<typeof evidenceFor>["facts"];
+  signature: string;
+};
+
 export function Planner() {
   const w = useWorkspace(),
     [entries, setEntries] = useState(w.data.plan.entries),
@@ -160,7 +201,7 @@ export function Planner() {
     [error, setError] = useState(""),
     [consent, setConsent] = useState(false),
     [busy, setBusy] = useState(false),
-    [ai, setAI] = useState<any>(null);
+    [ai, setAI] = useState<AIExplanation | null>(null);
   const evidence = evidenceFor(w.data.plan, w.data.purchase, w.data.delayDays),
     signature = JSON.stringify([
       w.data.plan,
@@ -171,7 +212,9 @@ export function Planner() {
       delay,
     ]),
     latest = useRef(signature);
-  latest.current = signature;
+  useEffect(() => {
+    latest.current = signature;
+  }, [signature]);
   const applyPlan = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
@@ -227,7 +270,9 @@ export function Planner() {
           delayDays: w.data.delayDays,
         }),
       });
-      const result: any = await response.json();
+      const result = (await response.json()) as AIExplanation & {
+        error?: string;
+      };
       if (!response.ok) throw new Error(result.error);
       if (latest.current !== version)
         throw new Error(
@@ -246,6 +291,7 @@ export function Planner() {
         title="Smart budgeting / Cash-flow planner"
         description="Apply your plan, compare a purchase and test whether expected income arrives late."
       />
+      <PurchaseDecision disabled={planDirty || purchaseDirty} />
       <div className="planner-columns">
         <section className="paper-section">
           <h2>Your starting point</h2>
@@ -481,11 +527,13 @@ export function Planner() {
                 <p>{ai.overview}</p>
                 <p>{ai.suggestion}</p>
                 <dl className="evidence">
-                  {ai.evidence?.map((fact: any) => (
+                  {ai.evidence?.map((fact) => (
                     <div key={fact.id}>
                       <dt>{fact.label}</dt>
                       <dd>
-                        {fact.type === "money" ? money(fact.value) : fact.value}
+                        {fact.type === "money" && typeof fact.value === "number"
+                          ? money(fact.value)
+                          : fact.value}
                       </dd>
                     </div>
                   ))}
@@ -544,7 +592,7 @@ export function Transactions() {
     [replace, setReplace] = useState(false),
     [undo, setUndo] = useState<Transaction[] | null>(null),
     [error, setError] = useState("");
-  function modify(index: number, field: string, value: any) {
+  function modify(index: number, field: string, value: string | boolean) {
     setDrafts((rows) =>
       rows.map((row, i) => (i === index ? { ...row, [field]: value } : row)),
     );
@@ -966,7 +1014,8 @@ export function Budgets() {
               <tbody>
                 {expenseCategories.map((category) => {
                   const row = summary.categories.find(
-                      (item: any) => item.category === category,
+                      (item: { category: string; spendingPaise: number }) =>
+                        item.category === category,
                     ),
                     limit = w.data.budgets[month]?.[category];
                   return (

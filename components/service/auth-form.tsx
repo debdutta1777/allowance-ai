@@ -1,16 +1,20 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { ThemeToggle } from "./theme";
 export function AuthForm({
   action,
   configured,
   notice = "",
+  unavailableMessage = "Account access is awaiting connection to the dedicated database. The fictional demo is available now; sign-up is disabled until secure storage is configured.",
 }: {
   action: "sign-in" | "sign-up" | "recover" | "password";
   configured: boolean;
   notice?: string;
+  unavailableMessage?: string;
 }) {
+  const router = useRouter();
   const [status, setStatus] = useState(""),
     [failed, setFailed] = useState(false),
     [busy, setBusy] = useState(false);
@@ -45,7 +49,7 @@ export function AuthForm({
       };
       if (!response.ok) throw new Error(result.error);
       setStatus(result.message);
-      if (result.signedIn) window.location.assign("/app/dashboard");
+      if (result.signedIn) router.replace("/app/dashboard");
     } catch (error) {
       setFailed(true);
       setStatus(
@@ -98,9 +102,7 @@ export function AuthForm({
         </p>
         {!configured && (
           <p role="status" className="notice">
-            Account access is awaiting connection to the dedicated database. The
-            fictional demo is available now; sign-up is disabled until secure
-            storage is configured.
+            {unavailableMessage}
           </p>
         )}
         <form method="post" action={"/api/auth/" + action} onSubmit={submit}>

@@ -8,17 +8,23 @@ import { money } from "./common";
 export function ForecastChart({
   plan,
   purchase,
+  reservePaise,
 }: {
   plan: Plan;
   purchase: { date: string; amountPaise: number };
+  reservePaise?: number;
 }) {
   const { baseline, proposed } = comparePurchase(plan, purchase);
   const series = [baseline, proposed].map((result) => [
     plan.openingBalancePaise,
     ...result.days.map((day) => day.closingBalancePaise),
   ]);
-  const top = Math.max(1, ...series.flat());
-  const bottom = Math.min(0, ...series.flat());
+  const top = Math.max(1, reservePaise ?? 0, ...series.flat());
+  const bottom = Math.min(
+    0,
+    ...series.flat(),
+    ...proposed.days.map((day) => day.beforeIncomePaise),
+  );
   const y = (value: number) => 24 + ((top - value) / (top - bottom)) * 148;
   const points = (values: number[]) =>
     values
@@ -57,8 +63,53 @@ export function ForecastChart({
         {bottom < 0 && (
           <line className="chart-zero" x1="48" x2="464" y1={y(0)} y2={y(0)} />
         )}
+        {reservePaise !== undefined && (
+          <g>
+            <line
+              className="chart-reserve"
+              x1="48"
+              x2="464"
+              y1={y(reservePaise)}
+              y2={y(reservePaise)}
+            />
+            <text
+              x="464"
+              y={y(reservePaise) - 6}
+              textAnchor="end"
+              className="chart-label"
+            >
+              Reserve
+            </text>
+          </g>
+        )}
+        {reservePaise !== undefined &&
+          proposed.days
+            .filter((day) => day.beforeIncomePaise < reservePaise)
+            .map((day) => (
+              <circle
+                key={day.date}
+                className="chart-breach"
+                cx={
+                  48 +
+                  ((proposed.days.findIndex((d) => d.date === day.date) + 1) /
+                    proposed.days.length) *
+                    416
+                }
+                cy={y(day.beforeIncomePaise)}
+                r="3"
+              >
+                <title>
+                  {day.date}: before income {money(day.beforeIncomePaise)},
+                  below reserve
+                </title>
+              </circle>
+            ))}
         <polyline className="chart-baseline" points={points(series[0])} />
-        <polyline className="chart-purchase" points={points(series[1])} />
+        <polyline
+          key={purchase.date + ":" + purchase.amountPaise}
+          className="chart-purchase"
+          points={points(series[1])}
+        />
         <text x="48" y="198" className="chart-label">
           {plan.startDate}
         </text>
@@ -73,6 +124,11 @@ export function ForecastChart({
       <figcaption>
         <span className="legend-baseline">Before purchase</span>
         <span className="legend-purchase">With purchase</span>
+        {reservePaise !== undefined && (
+          <span className="legend-breach">
+            Dots: below-reserve balance before income
+          </span>
+        )}
       </figcaption>
     </figure>
   );

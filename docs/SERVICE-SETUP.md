@@ -20,8 +20,9 @@ Do not use or modify AuditEase, AuditEaseD or Eventora. The new Supabase connect
    - `SUPABASE_PUBLISHABLE_KEY` (modern publishable key; no service-role key)
    - existing `GEMINI_API_KEY`, optional `GEMINI_MODEL`
 5. In Supabase Auth, configure the production Site URL and allow the exact production `/auth/confirm` URL and `/auth/confirm?next=/reset-password` recovery destination. Add only trusted preview URLs when testing. Keep email confirmation enabled. Configure an appropriate email provider for public use and set a minimum password length of 12. No authentication setting is disabled by this code.
-6. Redeploy Vercel after changing environment variables. Until configured, account forms explain the setup status and cannot submit. There is no fake login or fallback account data store.
-7. Verify signup, confirmation, password login, account save/reload, a second account's isolation, recovery and logout on the deployed environment. Test two-tab save conflicts. Do not claim these live checks passed before completing them.
+6. Set `PUBLIC_SIGNUP_ENABLED=true` only after custom SMTP delivers confirmation mail to a non-team test address. It defaults to false: new registration is clearly paused, existing account login remains available and the public fictional demo requires no account.
+7. Redeploy Vercel after changing environment variables. Until configured, account forms explain the setup status and cannot submit. There is no fake login or fallback account data store.
+8. Verify signup, confirmation, password login, account save/reload, a second account's isolation, recovery and logout on the deployed environment. Test two-tab save conflicts. Do not claim these live checks passed before completing them.
 
 ## Ownership and storage
 

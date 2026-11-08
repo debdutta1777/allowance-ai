@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { createContext, useContext, useEffect, useRef, useState } from "react";
 import {
   demoWorkspace,
@@ -29,24 +30,22 @@ export function WorkspaceProvider({
   demo: boolean;
   children: React.ReactNode;
 }) {
-  const [data, setData] = useState<Workspace | null>(null),
+  const [data, setData] = useState<Workspace | null>(() =>
+      demo ? demoWorkspace() : null,
+    ),
     [accountId, setAccountId] = useState(""),
     [revision, setRevision] = useState(0),
     [dirty, setDirty] = useState(false),
     [status, setStatus] = useState(
-      demo ? "Opening the fictional demo…" : "Loading your private workspace…",
+      demo
+        ? "Fictional demo. Changes stay in memory and reset when you reload."
+        : "Loading your private workspace…",
     ),
     [email, setEmail] = useState(""),
     [busy, setBusy] = useState(false);
   const generation = useRef(0);
   useEffect(() => {
-    if (demo) {
-      setData(demoWorkspace());
-      setStatus(
-        "Fictional demo. Changes stay in memory and reset when you reload.",
-      );
-      return;
-    }
+    if (demo) return;
     let alive = true;
     (async () => {
       try {
@@ -184,7 +183,7 @@ export function WorkspaceProvider({
         <h1>Your workspace</h1>
         <p role="status">{status}</p>
         <button onClick={() => window.location.reload()}>Retry loading</button>
-        <a href="/sign-in">Return to sign in</a>
+        <Link href="/sign-in">Return to sign in</Link>
       </section>
     );
   return (

@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useState } from "react";
 import { useWorkspace } from "./workspace-context";
 import {
@@ -846,7 +847,7 @@ export function Settings() {
           unsaved changes or resolving a save conflict.
         </p>
         {!w.demo && (
-          <a href="/forgot-password">Request a password recovery email</a>
+          <Link href="/forgot-password">Request a password recovery email</Link>
         )}
       </section>
     </>

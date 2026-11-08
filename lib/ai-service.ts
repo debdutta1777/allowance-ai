@@ -1,3 +1,4 @@
+import { z } from "zod";
 import { evidenceFor } from "../src/insights.ts";
 import { CATEGORIES } from "../src/imports.ts";
 import type { Plan } from "../src/forecast.ts";
@@ -17,15 +18,23 @@ const json = (body: unknown, status = 200) =>
       "X-Content-Type-Options": "nosniff",
     },
   });
-const objectSchema = (properties: Record<string, unknown>) => ({
+type Schema = {
+  type: string;
+  properties?: Record<string, Schema>;
+  required?: string[];
+  additionalProperties?: boolean;
+  enum?: string[];
+  items?: Schema;
+};
+const objectSchema = (properties: Record<string, Schema>): Schema => ({
   type: "object",
   properties,
   required: Object.keys(properties),
   additionalProperties: false,
 });
-function geminiSchema(schema: any): any {
+function geminiSchema(schema: Schema): Schema {
   return {
-    ...(schema.type ? { type: schema.type.toUpperCase() } : {}),
+    type: schema.type.toUpperCase(),
     ...(schema.properties
       ? {
           properties: Object.fromEntries(
@@ -87,14 +96,17 @@ export async function handleAI(
     return json({ error: "Use the planner on its own site." }, 403);
   if (!request.headers.get("content-type")?.startsWith("application/json"))
     return json({ error: "Use a JSON request." }, 415);
-  let body: any;
-  let context: any;
-  let schema: any;
+  let body: Record<string, unknown>;
+  let context: unknown;
+  let schema: Schema;
   let instructions = "";
   let facts: ReturnType<typeof evidenceFor>["facts"] = [];
   let rows: { id: string; description: string; direction: string }[] = [];
   try {
-    body = await readJSON(request);
+    const input: unknown = await readJSON(request);
+    if (!input || typeof input !== "object" || Array.isArray(input))
+      throw new Error("Use a JSON object.");
+    body = input as Record<string, unknown>;
     if (body?.sessionKey && !options.allowSessionKey)
       return json(
         { error: "Session keys are restricted to the Site owner." },
@@ -122,7 +134,11 @@ export async function handleAI(
         )
       )
         throw new Error("Scheduled labels must be under 120 characters.");
-      const evidence = evidenceFor(plan, body.purchase, body.delayDays ?? 3);
+      const evidence = evidenceFor(
+        plan,
+        body.purchase as { date: string; amountPaise: number },
+        (body.delayDays ?? 3) as number,
+      );
       facts = evidence.facts;
       context = {
         facts,
@@ -152,7 +168,14 @@ export async function handleAI(
       )
         throw new Error("Categorize between 1 and 50 rows at a time.");
       const ids = new Set<string>();
-      rows = body.rows.map((row: any) => {
+      rows = body.rows.map((input: unknown) => {
+        const row = z
+          .object({
+            id: z.string(),
+            description: z.string(),
+            direction: z.enum(["debit", "credit", "transfer"]),
+          })
+          .parse(input);
         if (
           typeof row.id !== "string" ||
           row.id.length > 80 ||
@@ -197,7 +220,10 @@ export async function handleAI(
     );
   }
   const apiKey =
-    options.key || (options.allowSessionKey ? body.sessionKey : undefined);
+    options.key ||
+    (options.allowSessionKey && typeof body.sessionKey === "string"
+      ? body.sessionKey
+      : undefined);
   if (!apiKey)
     return json(
       {
@@ -261,9 +287,10 @@ export async function handleAI(
       throw new Error("Incomplete or blocked AI response.");
     const text = candidate.content?.parts
       ?.filter(
-        (part: any) => part.thought !== true && typeof part.text === "string",
+        (part: { thought?: unknown; text?: unknown }) =>
+          part.thought !== true && typeof part.text === "string",
       )
-      .map((part: any) => part.text)
+      .map((part: { text: string }) => part.text)
       .join("");
     if (!text) throw new Error("AI did not return a usable response.");
     const output = JSON.parse(text);

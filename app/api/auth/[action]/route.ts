@@ -1,6 +1,7 @@
 import { z } from "zod";
 import {
   authConfigured,
+  publicSignupEnabled,
   serverSupabase,
   verifiedAccount,
 } from "../../../../lib/supabase/server";
@@ -38,6 +39,14 @@ export async function POST(
       503,
     );
   const action = (await params).action;
+  if (action === "sign-up" && !publicSignupEnabled())
+    return privateJSON(
+      {
+        error:
+          "New account registration is not open yet. Use the fictional demo or sign in to an existing account.",
+      },
+      503,
+    );
   try {
     const client = await serverSupabase();
     const body = await boundedJSON(request, 4096);

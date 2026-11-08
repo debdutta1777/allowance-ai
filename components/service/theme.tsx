@@ -1,30 +1,38 @@
 "use client";
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useSyncExternalStore } from "react";
 
 type Theme = "light" | "dark";
 const ThemeContext = createContext({
   theme: "light" as Theme,
   toggle: () => {},
 });
+function readTheme(): Theme {
+  return document.documentElement.dataset.theme === "dark" ? "dark" : "light";
+}
+function subscribeTheme(notify: () => void) {
+  function sync(event: StorageEvent) {
+    if (event.key !== "allowance-theme" && event.key !== null) return;
+    document.documentElement.dataset.theme =
+      event.newValue === "dark" ? "dark" : "light";
+    notify();
+  }
+  window.addEventListener("storage", sync);
+  window.addEventListener("allowance-theme-change", notify);
+  return () => {
+    window.removeEventListener("storage", sync);
+    window.removeEventListener("allowance-theme-change", notify);
+  };
+}
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setTheme] = useState<Theme>("light");
-  useEffect(() => {
-    setTheme(
-      document.documentElement.dataset.theme === "dark" ? "dark" : "light",
-    );
-    function sync(event: StorageEvent) {
-      if (event.key !== "allowance-theme" && event.key !== null) return;
-      const next = event.newValue === "dark" ? "dark" : "light";
-      document.documentElement.dataset.theme = next;
-      setTheme(next);
-    }
-    window.addEventListener("storage", sync);
-    return () => window.removeEventListener("storage", sync);
-  }, []);
+  const theme = useSyncExternalStore(
+    subscribeTheme,
+    readTheme,
+    () => "light" as Theme,
+  );
   function toggle() {
     const next = theme === "light" ? "dark" : "light";
     document.documentElement.dataset.theme = next;
-    setTheme(next);
+    window.dispatchEvent(new Event("allowance-theme-change"));
     try {
       localStorage.setItem("allowance-theme", next);
     } catch {

@@ -6,6 +6,9 @@ export function authConfigured() {
     process.env.SUPABASE_PUBLISHABLE_KEY?.trim(),
   );
 }
+export function publicSignupEnabled() {
+  return authConfigured() && process.env.PUBLIC_SIGNUP_ENABLED === "true";
+}
 export async function serverSupabase() {
   if (!authConfigured())
     throw new Error("Account storage has not been configured.");

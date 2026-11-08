@@ -2346,3 +2346,182 @@ summary {
     padding: 22px 18px;
   }
 }
+
+/* Purchase decisions share the existing paper and forest palette. */
+.purchase-decision {
+  padding: 32px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  margin-bottom: 32px;
+}
+.decision-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 32px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 24px;
+}
+.decision-heading h2 {
+  max-width: 620px;
+  font-size: clamp(28px, 3.5vw, 44px);
+  line-height: 1.08;
+  letter-spacing: -0.04em;
+  margin: 8px 0 0;
+}
+.decision-heading > p {
+  max-width: 250px;
+  font-size: 13px;
+}
+.decision-columns {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 40px;
+  padding-top: 28px;
+}
+.timeline-control {
+  display: block;
+  margin-top: 20px;
+}
+.timeline-control strong {
+  display: block;
+  font-size: 20px;
+  margin: 8px 0;
+  font-variant-numeric: tabular-nums;
+}
+.timeline-control input {
+  width: 100%;
+  padding: 0;
+  min-height: 36px;
+  accent-color: #426347;
+  cursor: ew-resize;
+}
+.timeline-events {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+.timeline-events button {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  align-items: start;
+  gap: 4px;
+  font-size: 12px;
+  background: transparent;
+  padding: 12px;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+.timeline-events button strong {
+  font-size: 13px;
+}
+.decision-verdict {
+  padding: 20px 0;
+  border-bottom: 1px solid var(--line);
+}
+.decision-verdict > strong {
+  font-size: 24px;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+}
+.decision-verdict p:last-child {
+  font-size: 14px;
+  line-height: 1.6;
+  margin-bottom: 0;
+}
+.decision-facts {
+  margin: 0 0 20px;
+}
+.decision-facts > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  border-bottom: 1px solid var(--line);
+  padding: 14px 0;
+}
+.decision-facts dt {
+  font-size: 12px;
+  max-width: 180px;
+}
+.decision-facts dd {
+  margin: 0;
+  text-align: right;
+  font-size: 15px;
+  font-variant-numeric: tabular-nums;
+}
+.decision-answer details {
+  margin-top: 24px;
+  font-size: 13px;
+  line-height: 1.6;
+}
+.chart-reserve {
+  stroke: #7a8068;
+  stroke-dasharray: 3 5;
+  opacity: 0.8;
+}
+.chart-breach {
+  fill: #9b624c;
+}
+.purchase-decision .forecast-chart {
+  margin: 0;
+}
+.purchase-decision .forecast-chart figcaption {
+  flex-wrap: wrap;
+  gap: 12px;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .purchase-decision .chart-purchase {
+    animation: decision-line 0.4s ease-out both;
+  }
+  @keyframes decision-line {
+    from {
+      opacity: 0.2;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+}
+@media (max-width: 1000px) {
+  .decision-columns {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}
+@media (max-width: 600px) {
+  .purchase-decision {
+    padding: 20px 16px;
+  }
+  .decision-heading {
+    display: block;
+  }
+  .decision-heading > p {
+    max-width: none;
+  }
+  .decision-facts > div {
+    gap: 12px;
+  }
+}
+.judge-demo {
+  padding: 28px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  margin-bottom: 32px;
+}
+.judge-demo h2 {
+  max-width: 700px;
+  font-size: clamp(28px, 3.3vw, 42px);
+}
+.judge-demo ol {
+  padding-left: 20px;
+  line-height: 1.9;
+}
+.forecast-chart figcaption .legend-breach::before {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #9b624c;
+  border: none;
+}

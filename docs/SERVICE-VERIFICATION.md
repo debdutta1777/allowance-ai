@@ -68,3 +68,14 @@ Verified on the stable feature-branch preview alias on 3 November 2026:
 - Expired confirmation links have a specific explanation; signup confirmation emails can be requested again with a generic account-safe response. Live resend email delivery has not been exercised.
 - Database advisor reports an informational no-policy notice for the private quota table: intentional deny-all direct access, restricted function access only. Leaked-password screening remains disabled on the Free plan.
 - Public signup SMTP and production promotion remain launch steps. Password recovery remains deliberately unverified.
+
+## Release candidate, 9 November 2026 IST
+
+- Added maximum-purchase and earliest-feasible-date calculations with a reserve held throughout the whole horizon. Tests compare the date search with exhaustive forecasts and preserve expenses-before-income ordering.
+- Added an interactive date timeline, scheduled-event controls, reserve markers, delayed-income comparison and an expandable explanation.
+- Added the guided public demo; adjusted fictional sample dates to populate the same budget month. The duplicate remains excluded and imports remain history-only.
+- 71 tests, TypeScript, ESLint and production build pass locally. Previous lint findings have been resolved with typed schemas, effect-safe refs, external-store theme subscription and framework links.
+- Local browser checks passed the alternative-date action, keyboard timeline control, evidence disclosure, seven-row sample review, duplicate exclusion and six-record apply across routes.
+- `PUBLIC_SIGNUP_ENABLED` defaults to false until external-address SMTP delivery is verified. The page and server route both enforce this; existing account login remains available.
+- No account record or database schema was changed in this release. Password recovery remains deliberately unverified.
+- The Vercel connector cannot see the project; the authorized dashboard session can. Project Node.js setting was aligned with the tested 24.x runtime. Production release and final anonymous checks are recorded separately after deployment.
